@@ -38,10 +38,10 @@ export default function ForgotPassword() {
           </div>
           <h2 className="text-2xl font-headline font-bold text-primary mb-4">Check Your Email</h2>
           <p className="text-secondary mb-8">
-            We have sent a password reset link to <span className="font-bold text-on-surface">{email}</span>.
+            We have sent a password reset link to <span className="font-bold text-on-surface">{email}</span>. 
             Please check your inbox and spam folder.
           </p>
-          <Link
+          <Link 
             to="/login"
             className="block w-full py-3 bg-surface-container hover:bg-surface-dim text-on-surface rounded-xl font-bold transition-all border border-surface-dim/20"
           >

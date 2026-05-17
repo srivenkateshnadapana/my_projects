@@ -145,52 +145,6 @@ export const StorageService = {
 
   // ============ COURSES ============
   
-  _mapCourse: (course) => {
-    const allowedPlan = course.allowed_plan || '1month';
-    // API returns either flat price_1month fields OR a nested prices object — handle both
-    const prices = course.prices || {};
-    const p1 = parseFloat(course.price_1month) || parseFloat(prices['1month']) || 0;
-    const p3 = parseFloat(course.price_3months) || parseFloat(prices['3months']) || 0;
-    const p6 = parseFloat(course.price_6months) || parseFloat(prices['6months']) || 0;
-    const pGeneric = parseFloat(course.price) || 0;
-    let displayPrice = 0;
-
-    // Select price based on allowed plan
-    if (allowedPlan === '1month') displayPrice = p1;
-    else if (allowedPlan === '3months') displayPrice = p3 || p1;
-    else if (allowedPlan === '6months') displayPrice = p6 || p3 || p1;
-
-    // Final safety fallback
-    displayPrice = displayPrice || p1 || p3 || p6 || pGeneric || 0;
-
-
-    return {
-      id: course.id,
-      title: course.title || 'Untitled Course',
-      description: course.description || '',
-      image: course.thumbnail || course.imageUrl || null,
-      instructor: course.instructor || 'Expert Instructor',
-      price: displayPrice,
-      originalPrice: parseFloat(course.price_6months) || null,
-      price_1month: parseFloat(course.price_1month) || 0,
-      price_3months: parseFloat(course.price_3months) || 0,
-      price_6months: parseFloat(course.price_6months) || 0,
-      category: course.category || (course.course_type === 'mega' ? 'development' : course.course_type === 'mini' ? 'design' : 'business'),
-      course_type: course.course_type,
-      allowed_plan: course.allowed_plan,
-      level: course.level || 'intermediate',
-      duration: course.lessons && course.lessons.length > 0 
-        ? Math.round(course.lessons.reduce((acc, l) => acc + (Number(l.duration) || 0), 0) / 60) 
-        : (course.duration || 20),
-      rating: course.rating || 4.5,
-      reviewCount: course.review_count || 0,
-      enrolled: course.enrolled > 1000 ? course.enrolled : ((parseInt(course.id) || 1) * 7391 % 90000) + 1000,
-      createdAt: course.createdAt,
-      userAccess: course.userAccess || { hasAccess: false },
-      modules: course.modules || []
-    };
-  },
-  
   getCourses: async (forceRefresh = false) => {
     try {
       const now = Date.now()
@@ -201,7 +155,38 @@ export const StorageService = {
       const data = await api.courses.getAll()
       const raw = data.data || []
 
-      const mappedCourses = raw.map(course => StorageService._mapCourse(course))
+      const mappedCourses = raw.map(course => {
+        // Find the most appropriate price to display as the default
+        const p1 = parseFloat(course.price_1month) || 0
+        const p3 = parseFloat(course.price_3months) || 0
+        const p6 = parseFloat(course.price_6months) || 0
+        
+        // Use 3 months as default if available, else 1 month
+        const displayPrice = p3 > 0 ? p3 : (p1 > 0 ? p1 : 0)
+        
+        return {
+          id: course.id,
+          title: course.title || 'Untitled Course',
+          description: course.description || '',
+          image: course.thumbnail || null,
+          instructor: course.instructor || 'Expert Instructor',
+          price: displayPrice,
+          originalPrice: p6 > 0 ? p6 : null,
+          price_1month: p1,
+          price_3months: p3,
+          price_6months: p6,
+          category: course.category || (course.course_type === 'mega' ? 'development' : 'general'),
+          course_type: course.course_type || 'mega',
+          allowed_plan: course.allowed_plan || '1month',
+          level: course.level || 'intermediate',
+          duration: course.duration || 20,
+          rating: course.rating || 4.5,
+          reviewCount: course.review_count || 0,
+          enrolled: course.enrolled || 0,
+          createdAt: course.createdAt,
+          userAccess: course.userAccess || { hasAccess: false }
+        }
+      })
 
       _cache.courses = mappedCourses
       _cache.lastFetched = now
@@ -212,16 +197,11 @@ export const StorageService = {
     }
   },
   
-  getCourseById: async (id, forceRefresh = false) => {
+  getCourseById: async (id) => {
     const courseId = parseInt(id)
     
-    if (!forceRefresh && _cache.courseDetails[courseId]) {
+    if (_cache.courseDetails[courseId]) {
       return _cache.courseDetails[courseId]
-    }
-
-    if (!forceRefresh && _cache.courses) {
-      const cached = _cache.courses.find(c => c.id === courseId)
-      if (cached) return cached
     }
 
     try {
@@ -229,9 +209,8 @@ export const StorageService = {
       const data = await api.courses.getById(courseId, token)
       
       if (data && data.success) {
-        const mapped = StorageService._mapCourse(data.data)
-        _cache.courseDetails[courseId] = mapped
-        return mapped
+        _cache.courseDetails[courseId] = data.data
+        return data.data
       }
       
       return null
@@ -329,17 +308,16 @@ export const StorageService = {
               resolve({ success: false, message: 'Payment verification failed' })
             }
           },
-          modal: {
-            ondismiss: function () {
-              // User closed Razorpay popup without paying — resolve so the button unlocks
-              resolve({ success: false, message: 'cancelled' })
-            }
-          },
           prefill: {
             name: StorageService.getUser()?.name || "",
             email: StorageService.getUser()?.email || ""
           },
-          theme: { color: "#0052cc" }
+          theme: { color: "#0052cc" },
+          modal: {
+            ondismiss: function () {
+              resolve({ success: false, message: 'cancelled' })
+            }
+          }
         }
 
         const rzp = new window.Razorpay(options)
@@ -396,7 +374,6 @@ export const StorageService = {
       favs.splice(index, 1)
     }
     setStorage(FAVORITES_KEY, favs)
-    window.dispatchEvent(new Event(`storage-update-${FAVORITES_KEY}`))
   },
   
   isBookmarked: (courseId) => {

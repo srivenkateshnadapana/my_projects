@@ -65,20 +65,10 @@ export default function CourseDetail() {
         ])
         setIsEnrolled(enrolled)
         setIsBookmarked(bookmarked)
-        
-        // Background refresh to ensure data is up to date (e.g. price changes)
-        try {
-          const freshCourse = await StorageService.getCourseById(courseId, true)
-          if (freshCourse && JSON.stringify(freshCourse) !== JSON.stringify(cachedCourse)) {
-            setCourse(freshCourse)
-          }
-        } catch (error) {
-          console.error('Error in background refresh:', error)
-        }
       } else {
         setLoading(true)
         try {
-          const data = await StorageService.getCourseById(courseId, true)
+          const data = await StorageService.getCourseById(courseId)
           if (data) {
             setCourse(data)
             const enrolled = await StorageService.isEnrolled(courseId)
@@ -108,13 +98,8 @@ export default function CourseDetail() {
 
   const allowedPlanId = course?.allowed_plan || '1month'
   const planInfo = planMap[allowedPlanId] || planMap['1month']
-  
-  // Use the mapped price which already accounts for the allowed plan
-  const basePrice = course?.price || (course?.[`price_${allowedPlanId}`]) || 599
-  const originalPrice = basePrice
+  const originalPrice = course?.prices ? course.prices[allowedPlanId] : (course?.price_1month || course?.price || 599)
   const discountPrice = hasDiscount ? Math.round(originalPrice * 0.9) : originalPrice
-
-
   
   const coinsToUse = useCoins ? Math.min(userCoins, discountPrice) : 0
   const finalPrice = discountPrice - coinsToUse
@@ -237,7 +222,7 @@ export default function CourseDetail() {
               <span className="bg-primary/10 backdrop-blur-md text-primary px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border border-primary/20">
                 {course.category || "Professional Development"}
               </span>
-              <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border ${course.course_type === 'mini' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' : 'bg-blue-500/10 text-blue-500 border-blue-500/20'}`}>
+              <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border ${course.course_type === 'mini' ? 'bg-warning/10 text-warning border-warning/20' : 'bg-primary/10 text-primary border-primary/20'}`}>
                 {course.course_type === 'mini' ? 'Mini Course' : 'Mega Course'}
               </span>
               <span className="flex items-center gap-1.5 text-primary font-bold text-sm">
@@ -461,8 +446,8 @@ export default function CourseDetail() {
                 {isEnrolled ? (
                   <>
                     <div className="mb-6 text-center">
-                      <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <CheckCircle2 className="w-8 h-8 text-green-500" />
+                      <div className="w-16 h-16 bg-success/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <CheckCircle2 className="w-8 h-8 text-success" />
                       </div>
                       <h3 className="text-xl font-headline font-bold text-primary mb-2">You're Enrolled!</h3>
                       <p className="text-secondary text-sm">You have access to this course.</p>
@@ -491,7 +476,7 @@ export default function CourseDetail() {
                           </div>
                         </div>
                         {hasDiscount && (
-                          <div className="mt-2 text-xs font-bold text-emerald-600 bg-emerald-500/10 px-2 py-1 rounded inline-block">
+                          <div className="mt-2 text-xs font-bold text-success bg-success/10 px-2 py-1 rounded inline-block">
                             10% Referral Discount Applied
                           </div>
                         )}
@@ -508,7 +493,7 @@ export default function CourseDetail() {
                           </div>
                         )}
                         {useCoins && coinsToUse > 0 && (
-                           <div className="mt-2 text-xs font-bold text-amber-600 bg-amber-500/10 px-2 py-1 rounded inline-block">
+                           <div className="mt-2 text-xs font-bold text-warning bg-warning/10 px-2 py-1 rounded inline-block">
                              -{coinsToUse} Coins Applied
                            </div>
                         )}

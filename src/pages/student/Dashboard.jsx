@@ -19,6 +19,7 @@ import { StorageService, ENROLLMENTS_KEY } from "../../services/storage"
 import { Link, useNavigate } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { api } from "../../services/api"
+import { AnalyticsWidget } from "../../components/student/AnalyticsWidget"
 
 export default function Dashboard() {
   return (
@@ -48,23 +49,15 @@ function DashboardContent() {
       
       const token = StorageService.getToken()
       
-      // Create a map to store course details (durations, etc)
-      const courseDetailsMap = {}
-      
       // Load progress and full course data
       const progressPromises = enrolled.map(async (course) => {
         const prog = await StorageService.getProgress(course.id)
         const completedLessonsCount = Object.values(prog).filter(p => p === 'completed').length
         
-        const courseRes = await api.courses.getById(course.id, token)
-        const courseData = courseRes?.data || {}
-        
-        // Store course details for deadline calculation
-        courseDetailsMap[course.id] = courseData
-        
+        const courseData = await api.courses.getById(course.id, token)
         let totalLessons = 0;
-        if (courseData.modules) {
-          totalLessons = courseData.modules.reduce((acc, mod) => acc + (mod.lessons?.length || 0), 0)
+        if (courseData && courseData.data && courseData.data.modules) {
+          totalLessons = courseData.data.modules.reduce((acc, mod) => acc + (mod.lessons?.length || 0), 0)
         }
         totalLessons = totalLessons > 0 ? totalLessons : 1;
         
@@ -247,6 +240,7 @@ function DashboardContent() {
               </p>
             </div>
             
+            {/* Streak Badge */}
             <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-fit lg:mr-20">
               {/* Learning Streak Badge - Commented for now and we'll update this section after Deployment
               <div className="flex-1 lg:flex-none lg:min-w-[220px] bg-surface-container-low px-4 sm:px-6 py-4 rounded-2xl border border-surface-dim/20 flex items-center gap-4">
@@ -283,8 +277,8 @@ function DashboardContent() {
             const Icon = stat.icon
             return (
               <motion.div key={stat.label} variants={itemVariants} whileHover={{ scale: 1.02 }} className="bg-surface-container-lowest p-4 sm:p-8 rounded-2xl sm:rounded-[2.5rem] border border-surface-dim/20 shadow-xl shadow-primary/5 transition-all group">
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl ${stat.accent === 'primary' ? 'bg-primary-fixed text-primary' : 'bg-surface-container-high text-secondary'} flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform`}>
-                  <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl ${stat.accent === 'primary' ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400' : 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400'} flex items-center justify-center mb-4 sm:mb-6 group-hover:scale-110 transition-transform`}>
+                  <Icon className="w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.5} />
                 </div>
                 <p className="text-[8px] sm:text-[10px] font-bold text-outline uppercase tracking-[0.2em] mb-1">{stat.label}</p>
                 <p className="text-2xl sm:text-4xl font-headline font-extrabold text-primary tracking-tighter">{stat.value}</p>
@@ -317,12 +311,12 @@ function DashboardContent() {
                 {recentActivity.map((activity) => (
                   <div key={activity.id} className="flex items-center gap-4 p-3 rounded-xl hover:bg-surface-container-high transition-all">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      activity.type === 'completed' ? 'bg-green-500/10' :
-                      activity.type === 'started' ? 'bg-blue-500/10' : 'bg-yellow-500/10'
+                      activity.type === 'completed' ? 'bg-success/10' :
+                      activity.type === 'started' ? 'bg-primary/10' : 'bg-warning/10'
                     }`}>
-                      {activity.type === 'completed' ? <Trophy className="w-4 h-4 text-green-500" /> :
-                       activity.type === 'started' ? <Play className="w-4 h-4 text-blue-500" /> :
-                       <Award className="w-4 h-4 text-yellow-500" />}
+                      {activity.type === 'completed' ? <Trophy className="w-4 h-4 text-success" /> :
+                       activity.type === 'started' ? <Play className="w-4 h-4 text-primary" /> :
+                       <Award className="w-4 h-4 text-warning" />}
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-on-surface">
@@ -362,8 +356,8 @@ function DashboardContent() {
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="font-bold text-primary leading-tight group-hover:text-blue-500 transition-colors">{deadline.course}</h3>
                       <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-widest ${
-                        deadline.priority === 'expired' ? 'bg-red-500 text-white shadow-lg' :
-                        deadline.priority === 'high' ? 'bg-red-500/10 text-red-500' : 'bg-primary/10 text-primary'
+                        deadline.priority === 'expired' ? 'bg-error text-on-error shadow-lg' :
+                        deadline.priority === 'high' ? 'bg-error/10 text-error' : 'bg-primary/10 text-primary'
                       }`}>
                         {deadline.priority === 'expired' ? 'Expired' : (deadline.priority === 'high' ? 'Urgent' : 'Upcoming')}
                       </span>
@@ -382,14 +376,13 @@ function DashboardContent() {
 
                     <div className="flex justify-between items-center pt-3 border-t border-surface-dim/10">
                       <div className="flex items-center gap-2">
-                        <Clock className={`w-3.5 h-3.5 ${deadline.priority === 'high' ? 'text-red-500' : 'text-primary'}`} />
+                        <Clock className={`w-3.5 h-3.5 ${deadline.priority === 'high' ? 'text-error' : 'text-primary'}`} />
                         <span className={`text-xs font-bold ${
-                          deadline.priority === 'expired' || deadline.priority === 'high' ? 'text-red-500' : 'text-primary'
+                          deadline.priority === 'expired' || deadline.priority === 'high' ? 'text-error' : 'text-primary'
                         }`}>
                           {deadline.diffDays < 0 ? 'Subscription Expired' : (deadline.diffDays === 0 ? 'Expires today' : `Due in ${deadline.diffDays} days`)}
                         </span>
                       </div>
-
                     </div>
                   </div>
                 ))}
@@ -397,6 +390,9 @@ function DashboardContent() {
             )}
           </motion.div>
         </div>
+
+        {/* Advanced Analytics */}
+        <AnalyticsWidget courses={courses} progress={progress} recentActivity={recentActivity} />
 
         {/* Active Courses Section */}
         <motion.section
@@ -449,14 +445,14 @@ function DashboardContent() {
                   >
                     <div className="w-full sm:w-48 h-48 sm:h-auto shrink-0 relative overflow-hidden">
                       <img 
-                        src={course.thumbnail || course.image || course.imageUrl || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=2560&auto=format&q=100"} 
+                        src={course.imageUrl || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=2560&auto=format&q=100"} 
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                         alt={course.title} 
                       />
                       <div className="absolute inset-0 group-hover:bg-transparent transition-colors"></div>
 
                       {progress[course.id] === 100 && (
-                        <div className="absolute top-3 right-3 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+                        <div className="absolute top-3 right-3 bg-success text-white text-[10px] px-2 py-1 rounded-full font-bold">
                           Completed!
                         </div>
                       )}
@@ -511,7 +507,6 @@ function DashboardContent() {
             </div>
           )}
         </motion.section>
-        {/* recommendedCourses */}
 
         {recommendedCourses.length > 0 && (
           <motion.section

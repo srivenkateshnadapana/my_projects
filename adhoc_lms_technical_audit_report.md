@@ -41,20 +41,6 @@
   * **Subscription Logic:** Replaced legacy `storage-update` event listeners with a direct `authStore.subscribe` effect.
   * **State Sync:** The `authState` is now set directly from the store's `getSnapshot()`.
 * **Technical Reason:** Fixed the "Sticky Profile" bug. Since the Header now "subscribes" to the store, it is forced to re-render the moment a user signs out, instantly removing private dashboard links from the DOM.
-### `src/services/storage.js` (DATA MAPPING STABILIZATION)
-
-* **Detailed Logic:** Introduced a private `_mapCourse` helper method to standardize the transformation of raw backend course objects into a predictable frontend structure.
-* **Functional Breakdown:**
-  * **Unified Pricing Engine:** Extracts the correct `displayPrice` based on the `allowed_plan` (1, 3, or 6 months).
-  * **Resilient Fallbacks:** Implemented a multi-tier fallback system (`planPrice` -> `genericPrice` -> `price1month` -> `0`) to prevent UI elements from displaying "1 rupee" or random defaults when partial backend data is received.
-* **Technical Reason:** Previously, `getCourses` (list) and `getCourseById` (detail) used divergent logic. When the detail page performed a background refresh, the UI would "flip" between mapped and raw data, creating a perception of randomized pricing. Consistent mapping eliminates this state-drift.
-
-### `src/pages/public/CourseDetail.jsx` (PRICING LOGIC REFINEMENT)
-
-* **Functional Breakdown:**
-  * **Plan-Aware Pricing:** Updated the `originalPrice` calculation to dynamically resolve the price field corresponding to the course's `allowed_plan`.
-  * **State Synchronization:** Ensured the component consumes the pre-mapped `price` from the StorageService, reducing redundant frontend calculations.
-* **Technical Reason:** Fixes the bug where courses with long-term plans (3/6 months) would incorrectly default to the 1-month price in the detail view, leading to price discrepancies during checkout.
 
 ---
 
@@ -71,9 +57,6 @@
 | `src/pages/public/BlogList.jsx`       | Migrated from manual `fetch` to `api.blogs.getAll()`.                           | Consistent loading states and error propagation for public content.             |
 | `src/pages/public/BlogPost.jsx`       | Migrated from manual `fetch` to `api.blogs.getById()`.                          | Standardizes the data-fetching pattern for individual articles.                 |
 | `src/pages/admin/AdminDashboard.jsx`  | Migrated from manual `fetch` to `api.admin.getStats()`.                         | Protects sensitive admin metrics with standardized request headers.             |
-| `src/pages/admin/AdminCourses.jsx`    | Injected `payload.price` into the update/create course logic.                   | Synchronizes the main price field with plan-specific prices to prevent DB drift. |
-| `src/services/storage.js`             | Implemented `_mapCourse` for consistent list/detail data normalization.         | Prevents UI "flickering" or price randomization during background data refreshes. |
-| `src/pages/public/CourseDetail.jsx`   | Robust fallback logic for `originalPrice` using plan-specific indexing.         | Ensures checkout prices match catalog displays regardless of backend data gaps.   |
 | `index.css`                           | Implemented `[data-theme='dark']` utility classes.                              | Fixes text contrast issues in quizzes and feedback modals for dark mode.        |
 
 ---

@@ -22,7 +22,6 @@ function AdminDashboardContent() {
   const [analytics, setAnalytics] = React.useState(null)
   const [ticketStats, setTicketStats] = React.useState(null)
 
-  const BASE = import.meta.env.VITE_API_URL || 'https://lms-backend-g1cy.onrender.com/api'
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -60,9 +59,9 @@ function AdminDashboardContent() {
 
   if (authError) return (
     <div className="min-h-screen bg-surface pt-24 pb-20 px-8 flex items-center justify-center">
-      <div className="bg-surface-container-lowest border border-red-500/20 rounded-3xl p-12 text-center max-w-lg shadow-xl">
-        <div className="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-          <ShieldCheck className="w-8 h-8 text-red-500" />
+      <div className="bg-surface-container-lowest border border-error/20 rounded-3xl p-12 text-center max-w-lg shadow-xl">
+        <div className="w-16 h-16 bg-error/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+          <ShieldCheck className="w-8 h-8 text-error" />
         </div>
         <h2 className="text-2xl font-headline font-bold text-primary mb-3">Session Expired</h2>
         <p className="text-on-surface-variant mb-2">Your admin session is no longer valid.</p>
@@ -91,7 +90,7 @@ function AdminDashboardContent() {
         <section className="mb-12 flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-success animate-pulse" />
               <span className="text-[10px] font-bold text-secondary uppercase tracking-[0.4em]">Proctor Command Center • Live</span>
             </div>
             <h1 className="text-5xl lg:text-6xl font-headline font-extrabold text-primary tracking-tighter italic">
@@ -127,7 +126,7 @@ function AdminDashboardContent() {
                 <div className={`w-12 h-12 rounded-2xl ${m.color === 'primary' ? 'bg-primary-fixed text-primary' : 'bg-surface-container-high text-secondary'} flex items-center justify-center group-hover:scale-110 transition-transform`}>
                   <m.icon className="w-6 h-6" />
                 </div>
-                <span className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-full">{m.trend}</span>
+                <span className="text-[10px] font-bold text-success bg-success/10 px-2 py-1 rounded-full">{m.trend}</span>
               </div>
               <p className="text-[10px] font-bold text-outline uppercase tracking-[0.2em] mb-1">{m.label}</p>
               <p className="text-4xl font-headline font-extrabold text-primary tracking-tighter">{m.value}</p>

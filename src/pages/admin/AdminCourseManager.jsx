@@ -27,6 +27,9 @@ import { CSS } from '@dnd-kit/utilities';
 
 import { SortableModule } from "../../components/admin/SortableModule"
 
+// Context for managing administrative actions without prop drilling
+export const AdminManagerContext = React.createContext(null);
+
 export default function AdminCourseManager() {
   return (
     <AdminProtectedRoute>
@@ -332,76 +335,76 @@ function AdminCourseManagerContent() {
           <p className="text-on-surface-variant">Manage curriculum hierarchy, tactical nodes, and knowledge assessments using Drag & Drop.</p>
         </div>
 
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-          {/* Modules Section */}
-          <section className="mb-16">
-            <div className="flex justify-between items-center mb-6">
+        <AdminManagerContext.Provider value={{ openModal, handleDelete }}>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+            {/* Modules Section */}
+            <section className="mb-16">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-headline font-bold text-primary flex items-center gap-3">
+                  <Layers className="w-6 h-6" /> Modules & Lessons
+                </h2>
+                <button onClick={() => openModal('module')} className="px-6 py-3 signature-gradient text-white rounded-xl font-bold hover:opacity-90 flex items-center gap-2">
+                  <Plus className="w-5 h-5" /> Add Module
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <SortableContext items={course.modules?.map(m => m.id) || []} strategy={verticalListSortingStrategy}>
+                  {course.modules?.map((module, mIdx) => {
+                    const modQuiz = moduleQuizzes.find(q => q.moduleId === module.id)
+                    return (
+                      <SortableModule 
+                        key={module.id} 
+                        module={module} 
+                        modQuiz={modQuiz}
+                        mIdx={mIdx} 
+                      />
+                    )
+                  })}
+                </SortableContext>
+                
+                {(!course.modules || course.modules.length === 0) && (
+                  <div className="p-12 text-center border-2 border-dashed border-surface-dim/30 rounded-3xl text-secondary">
+                    No modules found. Create one to get started.
+                  </div>
+                )}
+              </div>
+            </section>
+          </DndContext>
+
+          {/* Quizzes Section */}
+          <section>
+            <div className="flex justify-between items-center mb-6 mt-12">
               <h2 className="text-2xl font-headline font-bold text-primary flex items-center gap-3">
-                <Layers className="w-6 h-6" /> Modules & Lessons
+                <HelpCircle className="w-6 h-6" /> Course Quizzes
               </h2>
-              <button onClick={() => openModal('module')} className="px-6 py-3 signature-gradient text-white rounded-xl font-bold hover:opacity-90 flex items-center gap-2">
-                <Plus className="w-5 h-5" /> Add Module
+              <button onClick={() => openModal('quiz', null, null, 'final')} className="px-6 py-3 bg-surface-container-low text-primary border border-primary/20 rounded-xl font-bold hover:bg-primary/10 flex items-center gap-2">
+                <Plus className="w-5 h-5" /> Add Final Quiz
               </button>
             </div>
 
-            <div className="space-y-6">
-              <SortableContext items={course.modules?.map(m => m.id) || []} strategy={verticalListSortingStrategy}>
-                {course.modules?.map((module, mIdx) => {
-                  const modQuiz = moduleQuizzes.find(q => q.moduleId === module.id)
-                  return (
-                    <SortableModule 
-                      key={module.id} 
-                      module={module} 
-                      modQuiz={modQuiz}
-                      mIdx={mIdx} 
-                      openModal={openModal} 
-                      handleDelete={handleDelete} 
-                    />
-                  )
-                })}
-              </SortableContext>
-              
-              {(!course.modules || course.modules.length === 0) && (
-                <div className="p-12 text-center border-2 border-dashed border-surface-dim/30 rounded-3xl text-secondary">
-                  No modules found. Create one to get started.
-                </div>
-              )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               {!finalQuiz && (
+                  <div className="col-span-full p-12 text-center border-2 border-dashed border-surface-dim/30 rounded-3xl text-secondary">
+                    No final quiz configured.
+                  </div>
+               )}
+               {finalQuiz && (
+                 <div className="bg-surface-container-lowest p-6 border border-surface-dim/20 rounded-3xl shadow-lg flex justify-between items-start">
+                    <div>
+                      <h3 className="text-xl font-headline font-bold text-primary mb-2">{finalQuiz.title}</h3>
+                      <p className="text-xs font-bold text-success uppercase tracking-widest bg-success/10 px-2 py-1 rounded-md inline-block">Final Quiz • Pass: {finalQuiz.passingScore}%</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button onClick={() => openModal('manage_questions', finalQuiz)} className="p-2 text-primary bg-primary/10 rounded-lg hover:bg-primary/20 text-xs font-bold px-3">Questions ({finalQuiz.questions?.length || 0})</button>
+                      <button onClick={() => openModal('quiz', finalQuiz, null, 'final')} className="p-2 text-secondary hover:text-primary"><Edit className="w-4 h-4" /></button>
+                      <button onClick={() => handleDelete('quiz', finalQuiz.id)} className="p-2 text-error hover:bg-error/10 rounded-lg"><Trash2 className="w-4 h-4" /></button>
+                    </div>
+                 </div>
+               )}
             </div>
           </section>
-        </DndContext>
-
-        {/* Quizzes Section */}
-        <section>
-          <div className="flex justify-between items-center mb-6 mt-12">
-            <h2 className="text-2xl font-headline font-bold text-primary flex items-center gap-3">
-              <HelpCircle className="w-6 h-6" /> Course Quizzes
-            </h2>
-            <button onClick={() => openModal('quiz', null, null, 'final')} className="px-6 py-3 bg-surface-container-low text-primary border border-primary/20 rounded-xl font-bold hover:bg-primary/10 flex items-center gap-2">
-              <Plus className="w-5 h-5" /> Add Final Quiz
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-             {!finalQuiz && (
-                <div className="col-span-full p-12 text-center border-2 border-dashed border-surface-dim/30 rounded-3xl text-secondary">
-                  No final quiz configured.
-                </div>
-             )}
-             {finalQuiz && (
-               <div className="bg-surface-container-lowest p-6 border border-surface-dim/20 rounded-3xl shadow-lg flex justify-between items-start">
-                  <div>
-                    <h3 className="text-xl font-headline font-bold text-primary mb-2">{finalQuiz.title}</h3>
-                    <p className="text-xs font-bold text-emerald-500 uppercase tracking-widest bg-emerald-500/10 px-2 py-1 rounded-md inline-block">Final Quiz • Pass: {finalQuiz.passingScore}%</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <button onClick={() => openModal('manage_questions', finalQuiz)} className="p-2 text-blue-600 bg-blue-500/10 rounded-lg hover:bg-blue-500/20 text-xs font-bold px-3">Questions ({finalQuiz.questions?.length || 0})</button>
-                    <button onClick={() => openModal('quiz', finalQuiz, null, 'final')} className="p-2 text-secondary hover:text-primary"><Edit className="w-4 h-4" /></button>
-                    <button onClick={() => handleDelete('quiz', finalQuiz.id)} className="p-2 text-red-500 hover:bg-red-500/10 rounded-lg"><Trash2 className="w-4 h-4" /></button>
-                  </div>
-               </div>
-             )}
-          </div>
-        </section>
+        </AdminManagerContext.Provider>
 
         {/* Modals */}
         {activeModal && (
@@ -458,7 +461,7 @@ function AdminCourseManagerContent() {
                   {activeModal === 'quiz' && (
                     <>
                       <div className="mb-4">
-                        <span className={`text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-md ${quizForm.type === 'final' ? 'bg-emerald-500/10 text-emerald-600' : 'bg-blue-500/10 text-blue-600'}`}>
+                        <span className={`text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-md ${quizForm.type === 'final' ? 'bg-success/10 text-success' : 'bg-primary/10 text-primary'}`}>
                           {quizForm.type} Quiz
                         </span>
                       </div>
@@ -494,13 +497,13 @@ function AdminCourseManagerContent() {
                   <div className="space-y-4 mb-8">
                     {editingItem?.questions?.map((q, idx) => (
                       <div key={q.id} className="p-4 bg-surface-container-low border border-surface-dim/20 rounded-xl relative group">
-                        <button onClick={() => handleDeleteQuestion(q.id)} className="absolute top-2 right-2 p-1 text-red-500/50 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button onClick={() => handleDeleteQuestion(q.id)} className="absolute top-2 right-2 p-1 text-error/50 hover:text-error opacity-0 group-hover:opacity-100 transition-opacity">
                           <Trash2 className="w-4 h-4" />
                         </button>
                         <p className="font-bold text-primary text-sm pr-6"><span className="text-secondary">{idx + 1}.</span> {q.questionText}</p>
                         <ul className="mt-2 space-y-1 pl-4">
                           {q.options?.map((opt, oIdx) => (
-                            <li key={oIdx} className={`text-xs ${q.correctOptionIndex === oIdx ? 'text-emerald-600 font-bold' : 'text-secondary'}`}>
+                            <li key={oIdx} className={`text-xs ${q.correctOptionIndex === oIdx ? 'text-success font-bold' : 'text-secondary'}`}>
                               {oIdx === 0 ? 'A' : oIdx === 1 ? 'B' : oIdx === 2 ? 'C' : 'D'}. {opt}
                               {q.correctOptionIndex === oIdx && ' ✓'}
                             </li>
@@ -528,7 +531,7 @@ function AdminCourseManagerContent() {
                               name="correctOption" 
                               checked={questionForm.correctOptionIndex === idx}
                               onChange={() => setQuestionForm({...questionForm, correctOptionIndex: idx})}
-                              className="accent-emerald-500 w-4 h-4"
+                              className="accent-success w-4 h-4"
                             />
                             <input 
                               type="text" 
@@ -540,7 +543,7 @@ function AdminCourseManagerContent() {
                                 setQuestionForm({...questionForm, options: newOpts});
                               }} 
                               required 
-                              className={`w-full px-3 py-1.5 bg-surface-container rounded-lg border text-sm focus:outline-none ${questionForm.correctOptionIndex === idx ? 'border-emerald-500/50' : 'border-surface-dim/20'}`} 
+                              className={`w-full px-3 py-1.5 bg-surface-container rounded-lg border text-sm focus:outline-none ${questionForm.correctOptionIndex === idx ? 'border-success/50' : 'border-surface-dim/20'}`} 
                             />
                           </div>
                         ))}
@@ -560,4 +563,3 @@ function AdminCourseManagerContent() {
     </main>
   )
 }
-

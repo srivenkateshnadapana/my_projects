@@ -432,7 +432,7 @@ function PlayerContent() {
               
               <div className="mt-12 flex flex-col md:flex-row items-center justify-between gap-8 bg-surface-container-lowest p-10 rounded-[3rem] border border-surface-dim/20 shadow-xl shadow-primary/5">
                 <div className="flex items-center gap-6">
-                  <div className="w-14 h-14 rounded-2xl bg-primary-fixed flex items-center justify-center text-primary shadow-inner">
+                  <div className="w-14 h-14 rounded-2xl bg-primary-container flex items-center justify-center text-on-primary-container shadow-inner">
                     <ShieldCheck className="w-7 h-7" />
                   </div>
                   <div>

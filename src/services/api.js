@@ -279,6 +279,10 @@ export const api = {
   // Blogs
   blogs: {
     getAll: () => request('/blogs'),
-    getBySlug: (slug) => request(`/blogs/slug/${slug}`)
+    getBySlug: (slug) => request(`/blogs/slug/${slug}`),
+    adminGetAll: (token) => request('/blogs/admin/all', { token }),
+    create: (data, token) => request('/blogs', { method: 'POST', token, body: data }),
+    update: (id, data, token) => request(`/blogs/${id}`, { method: 'PUT', token, body: data }),
+    delete: (id, token) => request(`/blogs/${id}`, { method: 'DELETE', token })
   }
 }

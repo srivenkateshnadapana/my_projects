@@ -278,7 +278,6 @@ export default function Catalog() {
                         originalPrice={course.originalPrice}
                         rating={course.rating}
                         reviewCount={course.reviewCount}
-                        enrolled={course.enrolled}
                         image={course.image}
                         isFavorite={favorites.has(course.id)}
                         onFavoriteToggle={handleFavoriteToggle}

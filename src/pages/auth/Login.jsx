@@ -99,8 +99,8 @@ export default function Login() {
 
             {/* Error Message */}
             {error && (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-3">
-                <p className="text-red-500 text-sm text-center">{error}</p>
+              <div className="bg-error/10 border border-error/20 rounded-xl p-3">
+                <p className="text-error text-sm text-center">{error}</p>
               </div>
             )}
 

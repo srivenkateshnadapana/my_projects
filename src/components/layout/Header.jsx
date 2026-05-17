@@ -19,6 +19,7 @@ const PRIVATE_NAV_ITEMS = [
   { href: "/my-courses", label: "My Courses" },
   { href: "/dashboard", label: "Dashboard" },
   { href: "/certificates", label: "Certificates" },
+  { href: "/student/codelab", label: "CodeLab" },
   { href: "/my-doubts", label: "Doubts" },
 ]
 
@@ -63,6 +64,12 @@ export function Header() {
   }, [theme])
 
   React.useEffect(() => {
+    const syncTheme = () => setTheme(localStorage.getItem('theme') || 'light')
+    window.addEventListener('themeSync', syncTheme)
+    return () => window.removeEventListener('themeSync', syncTheme)
+  }, [])
+
+  React.useEffect(() => {
     const update = () => setIsAtTop(window.scrollY === 0)
     update()
     window.addEventListener("scroll", update, { passive: true })
@@ -80,7 +87,11 @@ export function Header() {
   }, [])
 
   const handleToggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
+    const newTheme = theme === "dark" ? "light" : "dark"
+    setTheme(newTheme)
+    document.documentElement.classList.toggle('dark', newTheme === 'dark')
+    localStorage.setItem('theme', newTheme)
+    window.dispatchEvent(new Event('themeSync'))
   }
 
   const handleSignOut = () => {
@@ -93,52 +104,46 @@ export function Header() {
   const { isAuthenticated, user } = authState
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${isAtTop ? 'bg-surface/90' : 'bg-surface shadow-sm border-b border-surface-dim'}`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all ${isAtTop ? 'glass-surface bg-background/70' : 'bg-surface-container border-b border-outline-variant/30 shadow-sm'}`} style={{transitionTimingFunction:'cubic-bezier(0.2,0,0,1)',transitionDuration:'300ms'}}>
       <div className="flex justify-between items-center w-full px-4 sm:px-8 py-4 max-w-7xl mx-auto">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 sm:gap-4 group">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 signature-gradient rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-            <span className="text-white font-headline font-bold text-base sm:text-xl">A</span>
+          <div className="w-10 h-10 bg-primary rounded-[var(--shape-extra-large)] flex items-center justify-center shadow-lg group-hover:scale-105 shape-morph transition-transform">
+            <span className="text-on-primary font-headline font-bold text-xl">A</span>
           </div>
-          <span className="text-lg sm:text-2xl font-bold tracking-tighter text-primary font-headline whitespace-nowrap">ADHOC LMS</span>
+          <span className="text-xl font-bold tracking-tight text-primary font-headline">ADHOC LMS</span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-8 font-headline font-semibold tracking-tight">
+        <div className="hidden lg:flex items-center gap-6 font-headline font-medium">
           {(isAuthenticated ? PRIVATE_NAV_ITEMS : PUBLIC_NAV_ITEMS).map((item) => (
             <Link
               key={item.href}
               to={item.href}
-              className={`text-secondary hover:text-primary transition-colors relative py-1 ${location.pathname === item.href ? 'text-primary' : ''}`}
+              className={`text-on-surface-variant hover:text-primary transition-m3-standard px-4 py-2 rounded-[var(--shape-full)] state-layer-primary ${location.pathname === item.href ? 'bg-primary-container text-on-primary-container font-medium' : ''}`}
             >
               {item.label}
-              {location.pathname === item.href && (
-                <motion.div 
-                  layoutId="nav-underline"
-                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary rounded-full"
-                />
-              )}
             </Link>
           ))}
         </div>
 
         {/* Desktop Actions */}
         <div className="hidden lg:flex items-center gap-4">
-          {/* Theme Toggle - Always Visible */}
           <button
             onClick={handleToggleTheme}
-            className="p-2 bg-surface-container-high rounded-full border border-surface-dim hover:bg-surface-dim transition-colors"
-            title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            className="p-3 bg-secondary-container text-on-secondary-container rounded-[var(--shape-full)] hover:opacity-90 transition-m3-standard shape-morph"
+            aria-label="Toggle theme"
           >
-            {theme === "dark" ? <Sun className="h-4 w-4 text-yellow-500" /> : <Moon className="h-4 w-4 text-primary" />}
+            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </button>
 
           {!isAuthenticated ? (
             <>
-              <Link to="/auth" className="px-5 py-2 text-primary font-semibold hover:opacity-80 transition-all duration-200 active:scale-95">Login</Link>
-              <Link to="/auth/register" className="px-6 py-2 signature-gradient text-white rounded-lg font-semibold hover:opacity-90 transition-all duration-200 active:scale-95 shadow-md">Sign Up</Link>
+              <Link to="/auth" className="m3-pill px-6 py-2 text-primary font-bold hover:bg-primary-container/50 state-layer-primary">Login</Link>
+              <Link to="/auth/register" className="m3-pill px-8 py-2 bg-primary text-on-primary font-bold shadow-md hover:shadow-lg transition-m3-emphasized">Sign Up</Link>
             </>
           ) : (
+
             <div className="flex items-center gap-4">
               {user?.role === 'admin' && (
                 <Link to="/admin" className="px-4 py-1.5 border border-primary text-primary rounded-lg text-xs font-bold hover:bg-primary/5 transition-all uppercase tracking-widest">
@@ -161,7 +166,7 @@ export function Header() {
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-surface-container rounded-xl shadow-lg border border-outline-variant overflow-hidden z-50">
+                  <div className="absolute right-0 mt-2 w-56 bg-surface-container-high rounded-[var(--shape-extra-large)] shadow-lg border border-outline-variant/50 overflow-hidden z-50" style={{boxShadow:'var(--elevation-3)'}}>
                     <div className="px-4 py-3 border-b border-outline-variant">
                       <p className="text-sm font-semibold text-on-surface">{user?.name}</p>
                       <p className="text-xs text-on-surface-variant">{user?.email}</p>
@@ -215,7 +220,7 @@ export function Header() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.35, ease: [0.05, 0.7, 0.1, 1] }}
           >
             <div className="flex flex-col gap-1 px-4 py-3">
             <button

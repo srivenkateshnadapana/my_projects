@@ -77,10 +77,12 @@ function ProfileContent() {
       toast.error("Please provide both current and new access keys.")
       return
     }
+
     if (passwords.new.length < 6) {
       toast.error("New access key must be at least 6 characters long.")
       return
     }
+
     setIsUpdating(true)
     try {
       const token = StorageService.getToken()
@@ -144,14 +146,16 @@ function ProfileContent() {
             <div className="flex flex-wrap justify-center md:justify-start gap-4">
               <span className="bg-surface-container-high px-4 py-1.5 rounded-full text-xs font-bold text-primary border border-surface-dim uppercase tracking-widest">{enrollments.length} Courses</span>
               <span className="bg-surface-container-high px-4 py-1.5 rounded-full text-xs font-bold text-primary border border-surface-dim uppercase tracking-widest">Active Member</span>
-              {wishlist.length > 0 && (
-                <span className="bg-rose-500/10 px-4 py-1.5 rounded-full text-xs font-bold text-rose-500 border border-rose-500/20 uppercase tracking-widest flex items-center gap-1">
-                  <Heart className="w-3 h-3 fill-rose-500" /> {wishlist.length} Saved
-                </span>
-              )}
             </div>
           </div>
         </section>
+
+        {/* Wishlist Header and Courses Grid */}
+        {wishlist.length > 0 && (
+          <span className="hidden bg-rose-500/10 px-4 py-1.5 rounded-full text-xs font-bold text-rose-500 border border-rose-500/20 uppercase tracking-widest flex items-center gap-1">
+            <Heart className="w-3 h-3 fill-rose-500" /> {wishlist.length} Saved
+          </span>
+        )}
 
         {/* ===== WISHLIST SECTION ===== */}
         <section className="mb-12">
@@ -254,7 +258,7 @@ function ProfileContent() {
           )}
         </section>
 
-        {/* Main Grid */}
+        {/* Main Grid: items-start prevents the cards from stretching vertically */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           
           {/* LEFT COLUMN: Security and Platform Preferences */}
@@ -290,7 +294,7 @@ function ProfileContent() {
               </div>
             </div>
 
-            {/* Platform Preferences */}
+            {/* Platform Preferences (Moved here from the right column) */}
             <div className="bg-surface-container-lowest border border-surface-dim rounded-[2rem] p-8 ambient-shadow">
               <div className="flex items-center gap-3 mb-8">
                 <div className="p-3 bg-surface-container-low rounded-xl text-primary"><Bell className="w-6 h-6" /></div>
@@ -308,8 +312,9 @@ function ProfileContent() {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Referral Program */}
+          {/* RIGHT COLUMN: Referral Program and Danger Zone */}
           <div className="flex flex-col gap-8">
+            {/* Referral Program */}
             {enrollments.length > 0 && user.referralCode && (
               <div className="bg-surface-container-lowest border border-surface-dim rounded-[2rem] p-8 ambient-shadow relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-[100px] pointer-events-none" />
@@ -351,6 +356,13 @@ function ProfileContent() {
                 </div>
               </div>
             )}
+
+            {/* Danger Zone
+            <div className="border border-error/20 bg-error/5 rounded-[2rem] p-8">
+              <h3 className="text-xl font-headline font-bold text-error mb-2">Danger Zone</h3>
+              <p className="text-xs text-secondary mb-6">Irreversible deletion of your entire academic record.</p>
+              <button className="w-full py-4 bg-surface-container-lowest text-error font-bold rounded-xl border border-error/20 hover:bg-error hover:text-white transition-all uppercase tracking-widest text-xs">Delete Identity</button>
+            </div> */}
           </div>
         </div>
       </div>

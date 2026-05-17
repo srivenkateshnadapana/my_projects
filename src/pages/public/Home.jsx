@@ -114,8 +114,8 @@ export default function Home() {
         className="relative overflow-hidden py-12 px-4 sm:px-8 lg:py-20"
       >
         {/* Background Gradient */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/3 rounded-full blur-[80px] pointer-events-none" />
+        <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-primary/8 rounded-full blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-tertiary/6 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div className="relative z-10 space-y-8">
@@ -157,7 +157,7 @@ export default function Home() {
             >
               <Link
                 to="/catalog"
-                className="px-16 py-5 border-2 border-white bg-primary text-on-primary rounded-xl font-bold hover:scale-105 transition-transform ambient-shadow flex items-center justify-center gap-2 group"
+                className="m3-pill px-10 py-4 bg-primary text-on-primary font-bold hover:scale-105 transition-transform ambient-shadow flex items-center justify-center gap-2 group text-base"
               >
                 Explore Courses
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -310,7 +310,7 @@ export default function Home() {
                   key={idx}
                   onMouseEnter={() => setHoveredCard(idx)}
                   onMouseLeave={() => setHoveredCard(null)}
-                  className="bg-surface-container-lowest rounded-2xl p-6 border border-surface-dim/20 hover:border-primary/30 transition-all hover:shadow-xl group"
+                  className="bg-surface-container-lowest rounded-[var(--shape-extra-large)] p-6 border border-outline-variant/30 hover:border-primary/40 transition-all card-lift group"
                 >
 
                   <div className="flex justify-between items-start mb-4">
@@ -416,7 +416,7 @@ export default function Home() {
             {testimonials.map((testimonial, idx) => (
               <div
                 key={idx}
-                className="bg-surface-container-lowest rounded-2xl p-6 border border-surface-dim/20 hover:border-primary/20 transition-all"
+                className="bg-surface-container-lowest rounded-[var(--shape-extra-large)] p-6 border border-outline-variant/30 hover:border-primary/30 transition-all card-lift"
               >
                 <div className="flex text-amber-400 mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
@@ -453,7 +453,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-white dark:bg-black rounded-[2rem] p-6 sm:p-10 flex flex-col lg:flex-row items-center lg:items-start gap-12 border border-black/5 dark:border-white/5"
+            className="bg-surface-container rounded-[2rem] p-6 sm:p-10 flex flex-col lg:flex-row items-center lg:items-start gap-12 border border-outline-variant/30 shadow-sm"
           >
             {/* CEO Image */}
             <div className="w-full lg:w-1/3 max-w-[380px]">
@@ -467,11 +467,11 @@ export default function Home() {
             </div>
 
             {/* Content */}
-            <div className="lg:w-3/4 text-black dark:text-white space-y-4">
-              <h2 className="text-2xl font-headline font-bold text-black dark:text-white mb-2">Message from the CEO</h2>
-              <div className="space-y-3 text-black dark:text-white leading-relaxed text-base">
+            <div className="lg:w-3/4 text-on-surface space-y-4">
+              <h2 className="text-2xl font-headline font-bold text-on-surface mb-2">Message from the CEO</h2>
+              <div className="space-y-3 text-on-surface-variant leading-relaxed text-base">
                 <p>
-                  <span className="font-bold text-black dark:text-white">ADHOC NETWORK LMS</span> is dedicated to a comprehensive ecosystem for trending courses from Data Analytics to AI cutting-edge cases in EdTech. We construct each course to help overcome the divide between academic exposure and world grounded experience.
+                  <span className="font-bold text-on-surface">ADHOC NETWORK LMS</span> is dedicated to a comprehensive ecosystem for trending courses from Data Analytics to AI cutting-edge cases in EdTech. We construct each course to help overcome the divide between academic exposure and world grounded experience.
                 </p>
                 <p>
                   It gives us great joy to see our students learn the various components of professional tools to prepare them for the future. We offer a full range of trending technology courses.
@@ -481,10 +481,10 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-black/10 dark:border-white/10">
-                <p className="text-xl font-bold text-black dark:text-white">Devika Pakruthi</p>
-                <p className="text-black dark:text-white font-medium">Chief Executive Officer</p>
-                <p className="text-black dark:text-white text-sm font-bold uppercase tracking-wider">ADHOC NETWORK</p>
+              <div className="pt-4 border-t border-outline-variant/30">
+                <p className="text-xl font-bold text-on-surface">Devika Pakruthi</p>
+                <p className="text-on-surface-variant font-medium">Chief Executive Officer</p>
+                <p className="text-secondary text-sm font-bold uppercase tracking-wider">ADHOC NETWORK</p>
               </div>
             </div>
           </motion.div>
@@ -492,7 +492,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section (NEW) */}
-      <section className="py-12 px-8 signature-gradient">
+      <section className="py-12 px-4 sm:px-8 signature-gradient-cta">
         <div className="max-w-4xl mx-auto text-center text-white">
           <h2 className="text-4xl font-headline font-bold mb-4">Ready to Elevate Your Career?</h2>
           <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">

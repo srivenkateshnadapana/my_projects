@@ -3,7 +3,10 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, Layers, Play, Edit, Trash2 } from 'lucide-react'
 
-export function SortableLesson({ lesson, moduleId, lIdx, openModal, handleDelete }) {
+import { AdminManagerContext } from '../../pages/admin/AdminCourseManager'
+
+export function SortableLesson({ lesson, moduleId, lIdx }) {
+  const { openModal, handleDelete } = React.useContext(AdminManagerContext)
   const {
     attributes,
     listeners,
@@ -38,7 +41,7 @@ export function SortableLesson({ lesson, moduleId, lIdx, openModal, handleDelete
       </div>
       <div className="flex gap-3">
         <button onClick={() => openModal('lesson', lesson, moduleId)} className="text-secondary hover:text-primary"><Edit className="w-4 h-4" /></button>
-        <button onClick={() => handleDelete('lesson', lesson.id)} className="text-red-500/60 hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
+        <button onClick={() => handleDelete('lesson', lesson.id)} className="text-error/60 hover:text-error"><Trash2 className="w-4 h-4" /></button>
       </div>
     </div>
   )

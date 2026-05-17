@@ -144,7 +144,7 @@ function AdminFeedbacksContent() {
                     className={`px-4 py-2 rounded-xl text-xs font-bold w-full flex items-center justify-center gap-2 transition-all ${
                       item.showOnHome 
                         ? 'bg-error/10 text-error hover:bg-error/20' 
-                        : 'bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20'
+                        : 'bg-success/10 text-success hover:bg-success/20'
                     }`}
                   >
                     {item.showOnHome ? (

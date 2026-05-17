@@ -39,7 +39,7 @@ export function SortControls({
   return (
     <div className="relative">
       {/* Sort Dropdown */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+      <div className="flex items-center gap-3">
         <div className="relative">
           <button
             onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -74,7 +74,7 @@ export function SortControls({
         <select
           value={level}
           onChange={(e) => onLevelChange(e.target.value)}
-          className="w-full sm:w-auto px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
+          className="px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
         >
           {levelOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -85,7 +85,7 @@ export function SortControls({
         <select
           value={duration}
           onChange={(e) => onDurationChange(e.target.value)}
-          className="w-full sm:w-auto px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
+          className="px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg text-on-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary cursor-pointer"
         >
           {durationOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>{opt.label}</option>

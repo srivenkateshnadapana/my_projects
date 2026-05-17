@@ -68,7 +68,7 @@ export function QuizPlayer({
               <div key={q.id} className="space-y-4">
                 <div className="flex items-start justify-between gap-4">
                   <h4 className="text-xl font-bold text-primary flex gap-4">
-                    <span className="text-secondary">{idx + 1}.</span> {q.questionText}
+                    <span className="text-secondary">{idx + 1}.</span> {q.questionText?.replace(/^\d+\.\s*/, '')}
                   </h4>
                   {showFeedback && (
                     <span className={`shrink-0 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${isCorrect ? 'bg-emerald-500/10 text-emerald-600' : 'bg-red-500/10 text-red-600'}`}>

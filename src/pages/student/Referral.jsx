@@ -2,7 +2,7 @@ import React from 'react'
 import { ProtectedRoute } from "../../context/ProtectedRoute"
 import { Gift } from "lucide-react"
 import { StorageService } from "../../services/storage"
-import { api } from "../../services/api"
+import { api } from '../../services/api'
 import { toast } from "sonner"
 
 export default function Referral() {

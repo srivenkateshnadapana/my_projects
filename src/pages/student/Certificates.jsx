@@ -125,7 +125,7 @@ function CertificatesContent() {
                     <Calendar className="w-4 h-4 shrink-0" />
                     <span>
                       Issued: <strong className="text-primary">
-                        {cert.issuedAt ? new Date(cert.issuedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A'}
+                        {(cert.issuedAt || cert.createdAt) ? new Date(cert.issuedAt || cert.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                       </strong>
                     </span>
                   </div>

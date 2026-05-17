@@ -5,8 +5,9 @@ import { Footer } from './components/layout/Footer'
 import { Toaster } from 'sonner'
 import { BottomNav } from './components/layout/BottomNav'
 import { ScrollToTop } from './components/layout/ScrollToTop'
-import Terms from "./components/Terms";
+import Terms from "./components/Terms"
 import Privacy from "./components/Privacy"
+
 
 // Lazy Pages
 const Home = React.lazy(() => import('./pages/public/Home'))
@@ -37,6 +38,7 @@ const BlogPost = React.lazy(() => import('./pages/public/BlogPost'))
 const AdminBlogs = React.lazy(() => import('./pages/admin/AdminBlogs'))
 const AdminFeedbacks = React.lazy(() => import('./pages/admin/AdminFeedbacks'))
 const StudentFeedback = React.lazy(() => import('./pages/student/StudentFeedback'))
+const CodeLab = React.lazy(() => import('./pages/student/CodeLab'))
 import { ErrorBoundary } from './components/common/ErrorBoundary'
 
 function App() {
@@ -69,6 +71,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/student/deadlines" element={<AllDeadlines />} />
             <Route path="/student/course/:id" element={<CoursePlayer />} />
+            <Route path="/student/codelab" element={<CodeLab />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/my-courses" element={<MyCourses />} />
             <Route path="/certificates" element={<Certificates />} />

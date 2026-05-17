@@ -1,7 +1,7 @@
 // src/components/layout/Footer.jsx
 import * as React from "react"
 import { Link } from "react-router-dom"
-import { Instagram, Twitter, Linkedin, Mail, MapPin, Phone, Send, TextAlignCenter } from "lucide-react"
+import { Instagram, Twitter, Linkedin, Mail, MapPin, Phone, Send } from "lucide-react"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -30,10 +30,10 @@ export function Footer() {
   }
 
   return (
-    <footer className="bg-surface-container-lowest border-t border-surface-dim/20 pt-12 md:pt-20 pb-12 lg:pb-12 font-body relative overflow-hidden">
+    <footer className="bg-surface-container-lowest border-t border-outline-variant/20 pt-12 md:pt-20 pb-12 lg:pb-12 font-body relative overflow-hidden">
       {/* Background Ambience */}
-      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-primary/3 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-primary/2 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-tertiary/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-y-12 sm:gap-x-8 lg:gap-x-12 lg:gap-y-8 mb-16 md:mb-20">
@@ -59,7 +59,7 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-surface-container border border-outline-variant flex items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary transition-all shadow-sm"
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-[var(--shape-large)] bg-surface-container border border-outline-variant flex items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary transition-m3-standard shadow-sm state-layer-primary"
                   aria-label={social.label}
                 >
                   <social.Icon className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={2.5} />
@@ -70,7 +70,7 @@ export function Footer() {
 
           {/* Newsletter Signup */}
           <div className="sm:col-span-2 lg:col-span-4">
-            <h4 className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-[0.3em] mb-6 sm:mb-8 italic">Newsletter</h4>
+            <h4 className="text-[10px] sm:text-xs font-bold text-primary uppercase tracking-[0.3em] mb-6 sm:mb-8 italic">NEWSLETTER</h4>
             <p className="text-sm text-on-surface-variant mb-6 leading-relaxed">
               Subscribe to receive tactical insights, curriculum updates, and exclusive content.
             </p>
@@ -81,7 +81,7 @@ export function Footer() {
                   placeholder="your@email.com"
                   className="w-full px-4 py-2.5 bg-surface-container border border-outline-variant rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition"
                 />
-                <button className="w-full sm:w-auto lg:w-full px-6 py-2.5 signature-gradient text-white rounded-lg text-sm font-semibold hover:opacity-90 transition-all active:scale-95 flex items-center justify-center gap-2">
+                <button className="w-full sm:w-auto lg:w-full px-6 py-2.5 signature-gradient-expressive text-white rounded-[var(--shape-full)] text-sm font-semibold hover:opacity-90 transition-m3-emphasized active:scale-95 flex items-center justify-center gap-2">
                   <Send className="w-4 h-4" />
                   Subscribe
                 </button>
@@ -120,7 +120,7 @@ export function Footer() {
         <div className="pt-8 pb-6 border-t border-surface-dim/20">
           <div className="flex flex-wrap justify-center gap-6 mb-6">
             {links.legal.map(link => (
-              <Link key={link.name} to={link.href} className="text-sm text-on-surface-variant hover:text-primary transition-colors">
+              <Link key={link.name} to={link.href} className="text-sm text-on-surface-variant hover:text-primary transition-m3-standard state-layer-primary px-3 py-1 rounded-[var(--shape-small)]">
                 {link.name}
               </Link>
             ))}
@@ -129,7 +129,7 @@ export function Footer() {
 
         {/* Bottom Shard */}
         <div className="pt-4 border-t border-surface-dim/20 flex flex-col lg:flex-row justify-between items-center gap-6">
-          <p className="text-[10px] sm:text-xs font-bold text-outline uppercase tracking-widest text-center  lg:text-left">
+          <p className="text-[10px] sm:text-xs font-bold text-outline uppercase tracking-widest text-center lg:text-left">
             &copy; {currentYear} Adhoc Network Tech.
           </p>
         </div>

@@ -107,7 +107,7 @@ function MyCoursesContent() {
                 >
                   <div className="h-48 relative overflow-hidden shrink-0">
                     <img 
-                      src={course.thumbnail || course.image || course.imageUrl || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=2560&auto=format&q=100"} 
+                      src={course.imageUrl || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=2560&auto=format&q=100"} 
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                       alt={course.title} 
                     />
@@ -115,19 +115,10 @@ function MyCoursesContent() {
                   </div>
                   <div className="p-6 flex flex-col flex-1">
                     <div className="flex justify-between items-start mb-2">
-                      <span className={`
-                        inline-block px-3 py-1 rounded-full text-xs font-semibold
-                        ${
-                          course.level === "beginner"
-                            ? "bg-green-100 text-green-700"
-                            : course.level === "advanced"
-                            ? "bg-purple-100 text-purple-700"
-                            : "bg-blue-100 text-blue-700"
-                        }
-                      `}>
-                        {course.level || "Intermediate"}
+                      <span className="bg-surface-container-high text-secondary px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">
+                        {course.category}
                       </span>
-                  </div>
+                    </div>
                     <h3 className="text-xl font-headline font-bold text-primary mb-2 line-clamp-2">
                       {course.title}
                     </h3>

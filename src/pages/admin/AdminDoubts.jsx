@@ -9,10 +9,10 @@ import {
 } from "lucide-react"
 
 const STATUS_CONFIG = {
-  'open':        { label: 'Open',        color: 'text-blue-600',   bg: 'bg-blue-500/10',   border: 'border-blue-200' },
-  'in-progress': { label: 'In Progress', color: 'text-amber-600',  bg: 'bg-amber-500/10',  border: 'border-amber-200' },
-  'resolved':    { label: 'Resolved',    color: 'text-emerald-600',bg: 'bg-emerald-500/10',border: 'border-emerald-200' },
-  'closed':      { label: 'Closed',      color: 'text-outline',    bg: 'bg-surface-dim/10',border: 'border-surface-dim' },
+  'open':        { label: 'Open',        color: 'text-primary',   bg: 'bg-primary/10',   border: 'border-primary/20' },
+  'in-progress': { label: 'In Progress', color: 'text-warning',   bg: 'bg-warning/10',   border: 'border-warning/20' },
+  'resolved':    { label: 'Resolved',    color: 'text-success',   bg: 'bg-success/10',   border: 'border-success/20' },
+  'closed':      { label: 'Closed',      color: 'text-outline',   bg: 'bg-surface-dim/10',border: 'border-surface-dim' },
 }
 
 export default function AdminDoubts() {
@@ -98,18 +98,18 @@ function AdminDoubtsContent() {
   }
 
   const statCards = [
-    { label: 'Open',        value: stats.open,       color: 'text-blue-600',    bg: 'bg-blue-500/10' },
-    { label: 'In Progress', value: stats.inProgress,  color: 'text-amber-600',   bg: 'bg-amber-500/10' },
-    { label: 'Resolved',    value: stats.resolved,    color: 'text-emerald-600', bg: 'bg-emerald-500/10' },
+    { label: 'Open',        value: stats.open,       color: 'text-primary',    bg: 'bg-primary/10' },
+    { label: 'In Progress', value: stats.inProgress,  color: 'text-warning',   bg: 'bg-warning/10' },
+    { label: 'Resolved',    value: stats.resolved,    color: 'text-success', bg: 'bg-success/10' },
     { label: 'Closed',      value: stats.closed,      color: 'text-outline',     bg: 'bg-surface-dim/10' },
   ]
 
   if (authError) {
     return (
       <div className="min-h-screen bg-surface pt-24 pb-20 px-8 flex items-center justify-center">
-        <div className="bg-surface-container-lowest border border-red-500/20 rounded-3xl p-12 text-center max-w-lg shadow-xl">
-          <div className="w-16 h-16 bg-red-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
-            <AlertCircle className="w-8 h-8 text-red-500" />
+        <div className="bg-surface-container-lowest border border-error/20 rounded-3xl p-12 text-center max-w-lg shadow-xl">
+          <div className="w-16 h-16 bg-error/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+            <AlertCircle className="w-8 h-8 text-error" />
           </div>
           <h2 className="text-2xl font-headline font-bold text-primary mb-3">Session Expired</h2>
           <p className="text-on-surface-variant mb-2">Your admin session is no longer valid.</p>
@@ -200,7 +200,7 @@ function AdminDoubtsContent() {
                           {cfg.label}
                         </span>
                         {!ticket.adminResponse && ticket.status === 'open' && (
-                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold bg-red-500/10 text-red-600 animate-pulse">
+                          <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold bg-error/10 text-error animate-pulse">
                             Needs Reply
                           </span>
                         )}
@@ -239,8 +239,8 @@ function AdminDoubtsContent() {
 
                       {/* Existing Response */}
                       {ticket.adminResponse && (
-                        <div className="p-5 bg-emerald-500/5 border border-emerald-500/20 rounded-2xl">
-                          <p className="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-2 flex items-center gap-2">
+                        <div className="p-5 bg-success/5 border border-success/20 rounded-2xl">
+                          <p className="text-xs font-bold text-success uppercase tracking-widest mb-2 flex items-center gap-2">
                             <CheckCircle2 className="w-3.5 h-3.5" /> Your Response
                           </p>
                           <p className="text-primary leading-relaxed">{ticket.adminResponse}</p>
