@@ -1,0 +1,80 @@
+export const INITIAL_COURSES = [
+  {
+    id: "1",
+    title: "Advanced Network Penetration Testing",
+    instructor: "Sarah Jenkins",
+    price: 89.99,
+    category: "cybersecurity",
+    level: "advanced",
+    rating: 4.9,
+    createdAt: "2024-01-15",
+    description: "Master the execution of sophisticated attacks on modern networks using elite frameworks, zero-day threat analysis, and invisible payload deployment.",
+    durationHours: 40,
+    outcomes: ["Exploit active directory logic flaws", "Craft custom payloads for EDR evasion", "Deploy lateral movement strategies", "Write comprehensive security reports"]
+  },
+  {
+    id: "2",
+    title: "Zero Trust Architecture Fundamentals",
+    instructor: "Michael Chen",
+    price: 95.00,
+    category: "cybersecurity",
+    level: "intermediate",
+    rating: 4.8,
+    createdAt: "2024-02-10",
+    description: "Learn how to architect and implement identity-first, micro-segmented security perimeters across complex multi-cloud ecosystems.",
+    durationHours: 25,
+    outcomes: ["Implement robust identity pooling", "Design micro-segmentation rules", "Analyze continuous authorization flows", "Secure legacy systems with proxy integration"]
+  },
+  {
+    id: "3",
+    title: "AWS Cloud Practitioner Mastery",
+    instructor: "Elena Rodriguez",
+    price: 75.00,
+    category: "cloud",
+    level: "beginner",
+    rating: 4.7,
+    createdAt: "2024-03-01",
+    description: "The ultimate pathway to understanding AWS global infrastructure, core services, cloud economics, and basic security in the cloud.",
+    durationHours: 15,
+    outcomes: ["Deploy scalable EC2 clusters", "Understand S3 glacier tiering", "Configure VPC peering correctly", "Pass the official Cloud Practitioner exam"]
+  },
+  {
+    id: "4",
+    title: "AI-Powered Threat Hunting",
+    instructor: "Dr. James Lee",
+    price: 120.00,
+    category: "aiml",
+    level: "advanced",
+    rating: 5.0,
+    createdAt: "2024-03-15",
+    description: "Leverage machine learning models to detect heuristic anomalies, behavioral drifts, and advanced persistent threats in real-time.",
+    durationHours: 35,
+    outcomes: ["Train unsupervised anomaly detection models", "Parse massive syslogs with NLP", "Automate incident response pipelines", "Hunt for fileless malware patterns"]
+  },
+  {
+    id: "5",
+    title: "Kubernetes Security & Governance",
+    instructor: "Alice Walker",
+    price: 85.00,
+    category: "devops",
+    level: "intermediate",
+    rating: 4.6,
+    createdAt: "2024-01-22",
+    description: "A deep dive into locking down containerized applications using RBAC, Network Policies, and Pod Security Standards in K8s.",
+    durationHours: 30,
+    outcomes: ["Harden kube-apiserver endpoints", "Implement strict NetworkPolicies", "Audit RBAC permissions mapping", "Integrate Falco for runtime security"]
+  },
+  {
+    id: "6",
+    title: "DevSecOps CI/CD Pipelines",
+    instructor: "Tom Wilson",
+    price: 65.00,
+    category: "devops",
+    level: "advanced",
+    rating: 4.8,
+    createdAt: "2024-04-05",
+    description: "Build unshakeable continuous integration pipelines that automatically scan for vulnerabilities, secrets, and compliance drift before every deployment.",
+    durationHours: 20,
+    outcomes: ["Configure GitHub Actions security gates", "Implement SAST & DAST tools", "Manage HashiCorp Vault secrets", "Automate Docker image signing"]
+  }
+]
