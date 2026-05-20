@@ -1,21 +1,20 @@
-import React from "react"
+import React from "react";
 
 export default function Terms() {
   return (
     <div className="min-h-screen bg-background text-foreground px-6 py-16">
       <div className="max-w-5xl mx-auto bg-surface-container rounded-2xl shadow-lg border border-outline-variant p-8 md:p-12">
-
         <h1 className="text-4xl md:text-5xl font-bold text-primary mb-8">
           Terms of Engagement
         </h1>
 
         <p className="text-base md:text-lg leading-8 text-on-surface-variant mb-8">
-          This Learning Management System portal is only to be used in accordance
-          with the distinct professional or academic standards established by the Company.
+          This Learning Management System portal is only to be used in
+          accordance with the distinct professional or academic standards
+          established by the Company.
         </p>
 
         <div className="space-y-8">
-
           <section>
             <h2 className="text-2xl font-semibold text-primary mb-4">
               Intellectual Property
@@ -23,9 +22,9 @@ export default function Terms() {
 
             <p className="text-base leading-8 text-on-surface-variant">
               The entirety of the content made available on this platform,
-              including technical modules, proprietary source code,
-              educational datasets, documents, videos, and learning materials,
-              is the sole intellectual property of the Company.
+              including technical modules, proprietary source code, educational
+              datasets, documents, videos, and learning materials, is the sole
+              intellectual property of the Company.
             </p>
           </section>
 
@@ -35,9 +34,8 @@ export default function Terms() {
             </h2>
 
             <p className="text-base leading-8 text-on-surface-variant">
-              Unauthorized reproduction, redistribution, resale,
-              modification, or commercial use of platform content
-              is strictly prohibited.
+              Unauthorized reproduction, redistribution, resale, modification,
+              or commercial use of platform content is strictly prohibited.
             </p>
           </section>
 
@@ -59,9 +57,9 @@ export default function Terms() {
             </h2>
 
             <p className="text-base leading-8 text-on-surface-variant">
-              The Company reserves the right to monitor platform activity
-              and track user progress for certification verification,
-              academic integrity, and security purposes.
+              The Company reserves the right to monitor platform activity and
+              track user progress for certification verification, academic
+              integrity, and security purposes.
             </p>
           </section>
 
@@ -71,14 +69,12 @@ export default function Terms() {
             </h2>
 
             <p className="text-base leading-8 text-on-surface-variant">
-              The Company may suspend or terminate access for policy
-              violations, misuse of content, or security concerns.
+              The Company may suspend or terminate access for policy violations,
+              misuse of content, or security concerns.
             </p>
           </section>
-
         </div>
-
       </div>
     </div>
-  )
+  );
 }

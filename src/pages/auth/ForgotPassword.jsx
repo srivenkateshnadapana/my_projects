@@ -1,33 +1,37 @@
-import * as React from "react"
-import { Link } from "react-router-dom"
-import { Mail, ArrowRight, Loader2, CheckCircle2 } from "lucide-react"
-import { StorageService } from "../../services/storage"
+import * as React from "react";
+import { Link } from "react-router-dom";
+import { Mail, ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
+import { StorageService } from "../../services/storage";
 
 export default function ForgotPassword() {
-  const [email, setEmail] = React.useState("")
-  const [loading, setLoading] = React.useState(false)
-  const [error, setError] = React.useState("")
-  const [success, setSuccess] = React.useState(false)
+  const [email, setEmail] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [success, setSuccess] = React.useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
+    e.preventDefault();
+    setLoading(true);
+    setError("");
     try {
-      const result = await StorageService.forgotPassword(email)
+      const result = await StorageService.forgotPassword(email);
 
       if (result.success) {
-        setSuccess(true)
+        setSuccess(true);
       } else {
         // Show detailed error if available, else fallback to message
-        setError(result.error ? `Error: ${result.error}` : (result.message || "Failed to process request. Please try again."))
+        setError(
+          result.error
+            ? `Error: ${result.error}`
+            : result.message || "Failed to process request. Please try again.",
+        );
       }
     } catch (err) {
-      setError("Network error. Please try again.")
+      setError("Network error. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (success) {
     return (
@@ -36,12 +40,15 @@ export default function ForgotPassword() {
           <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-8 h-8 text-green-500" />
           </div>
-          <h2 className="text-2xl font-headline font-bold text-primary mb-4">Check Your Email</h2>
+          <h2 className="text-2xl font-headline font-bold text-primary mb-4">
+            Check Your Email
+          </h2>
           <p className="text-secondary mb-8">
-            We have sent a password reset link to <span className="font-bold text-on-surface">{email}</span>. 
-            Please check your inbox and spam folder.
+            We have sent a password reset link to{" "}
+            <span className="font-bold text-on-surface">{email}</span>. Please
+            check your inbox and spam folder.
           </p>
-          <Link 
+          <Link
             to="/login"
             className="block w-full py-3 bg-surface-container hover:bg-surface-dim text-on-surface rounded-xl font-bold transition-all border border-surface-dim/20"
           >
@@ -49,7 +56,7 @@ export default function ForgotPassword() {
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -58,10 +65,16 @@ export default function ForgotPassword() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 signature-gradient rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <span className="text-white font-headline font-bold text-2xl">A</span>
+            <span className="text-white font-headline font-bold text-2xl">
+              A
+            </span>
           </div>
-          <h1 className="text-3xl font-headline font-bold text-primary mb-2">Forgot Password?</h1>
-          <p className="text-secondary">Enter your email and we'll send you a reset link</p>
+          <h1 className="text-3xl font-headline font-bold text-primary mb-2">
+            Forgot Password?
+          </h1>
+          <p className="text-secondary">
+            Enter your email and we'll send you a reset link
+          </p>
         </div>
 
         {/* Form */}
@@ -114,12 +127,15 @@ export default function ForgotPassword() {
 
           {/* Back to Login */}
           <div className="mt-6 text-center">
-            <Link to="/login" className="text-primary font-bold hover:underline text-sm">
+            <Link
+              to="/login"
+              className="text-primary font-bold hover:underline text-sm"
+            >
               Back to Login
             </Link>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

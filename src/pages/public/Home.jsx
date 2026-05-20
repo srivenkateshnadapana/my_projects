@@ -1,6 +1,6 @@
 // src/pages/public/Home.jsx
-import * as React from "react"
-import { Link } from "react-router-dom"
+import * as React from "react";
+import { Link } from "react-router-dom";
 import {
   ArrowRight,
   Play,
@@ -16,127 +16,144 @@ import {
   Clock,
   Sparkles,
   ChevronRight,
-  Loader2
-} from "lucide-react"
-import { motion, useInView } from "framer-motion"
-import { StorageService } from "../../services/storage"
-import { api } from "../../services/api"
+  Loader2,
+} from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { StorageService } from "../../services/storage";
+import { api } from "../../services/api";
 
 // Animation variants
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
-}
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
 
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.1 }
-  }
-}
+    transition: { staggerChildren: 0.1 },
+  },
+};
 
 export default function Home() {
-  const [hoveredCard, setHoveredCard] = React.useState(null)
-  const heroRef = React.useRef(null)
-  const isHeroInView = useInView(heroRef, { once: true })
+  const [hoveredCard, setHoveredCard] = React.useState(null);
+  const heroRef = React.useRef(null);
+  const isHeroInView = useInView(heroRef, { once: true });
 
-  // Stats data
-  const stats = [
-    { value: "12,000+", label: "Active Learners", icon: Users },
-    { value: "150+", label: "Expert Mentors", icon: Brain },
-    { value: "500+", label: "Live Sessions", icon: Video },
-    { value: "98%", label: "Success Rate", icon: TrendingUp },
-  ]
+  // Stats data state
+  const [stats, setStats] = React.useState([
+    { value: "1", label: "Active Learners", icon: Users },
+    { value: "1", label: "Chief Mentors", icon: Brain },
+    { value: "0", label: "Course Lectures", icon: Video },
+    { value: "100%", label: "Placement Support", icon: TrendingUp },
+  ]);
 
-  // Testimonials state
-  const [testimonials, setTestimonials] = React.useState([
-    {
-      user: { name: "Dr. Sarah Chen", role: "CTO, TechForward", avatar: "https://i.pravatar.cc/150?img=1" },
-      content: "The curriculum depth and production quality are unmatched. This platform accelerated our team's upskilling by 3x.",
-      rating: 5,
-    },
-    {
-      user: { name: "Michael Rodriguez", role: "Lead Architect", avatar: "https://i.pravatar.cc/150?img=2" },
-      content: "Finally, a learning platform that respects design sophistication. The bento layout makes discovery effortless.",
-      rating: 5,
-    },
-    {
-      user: { name: "Priya Sharma", role: "Product Manager", avatar: "https://i.pravatar.cc/150?img=3" },
-      content: "The certification helped me transition into a leadership role. Highly recommend for serious professionals.",
-      rating: 5,
-    }
-  ])
+  // Testimonials state - Start completely empty to reflect real Supabase state
+  const [testimonials, setTestimonials] = React.useState([]);
 
   React.useEffect(() => {
-    const fetchFeedbacks = async () => {
+    const fetchRealtimeData = async () => {
       try {
-        const res = await api.feedbacks.getHome()
-        if (res.success && res.data && res.data.length > 0) {
-          setTestimonials(res.data)
+        const [statsRes, feedbacksRes] = await Promise.all([
+          api.admin.getStats(),
+          api.feedbacks.getHome(),
+        ]);
+
+        if (statsRes?.success && statsRes.data) {
+          setStats([
+            {
+              value: Math.max(
+                1,
+                statsRes.data.users?.students || 0,
+              ).toLocaleString(),
+              label: "Active Learners",
+              icon: Users,
+            },
+            { value: "1", label: "Chief Mentors", icon: Brain },
+            {
+              value: (statsRes.data.content?.courses || 0).toString(),
+              label: "Course Lectures",
+              icon: Video,
+            },
+            { value: "100%", label: "Placement Support", icon: TrendingUp },
+          ]);
+        }
+
+        if (feedbacksRes?.success && feedbacksRes.data) {
+          setTestimonials(feedbacksRes.data);
         }
       } catch (err) {
-        console.error("Failed to fetch home feedbacks:", err)
+        console.error("Failed to load real-time data:", err);
       }
-    }
-    fetchFeedbacks()
-  }, [])
+    };
+    fetchRealtimeData();
+  }, []);
+
+  const currentUser = StorageService.getUser();
+  const leaderName =
+    currentUser?.full_name || currentUser?.name || "Sri Venkatesh Nadapana";
 
   // Courses state
-  const [featuredCourses, setFeaturedCourses] = React.useState([])
-  const [coursesLoading, setCoursesLoading] = React.useState(true)
+  const [featuredCourses, setFeaturedCourses] = React.useState([]);
+  const [coursesLoading, setCoursesLoading] = React.useState(true);
 
   React.useEffect(() => {
     const fetchCourses = async () => {
       try {
-        setCoursesLoading(true)
-        const data = await StorageService.getCourses()
-        // Randomize and take 3 for variety on every refresh
-        const randomized = [...data].sort(() => 0.5 - Math.random())
-        setFeaturedCourses(randomized.slice(0, 3))
+        setCoursesLoading(true);
+        const data = await StorageService.getCourses();
+        const randomized = [...data].sort(() => 0.5 - Math.random());
+        setFeaturedCourses(randomized.slice(0, 3));
       } catch (err) {
-        console.error("Failed to fetch featured courses:", err)
+        console.error("Failed to fetch featured courses:", err);
       } finally {
-        setCoursesLoading(false)
+        setCoursesLoading(false);
       }
-    }
-    fetchCourses()
-  }, [])
+    };
+    fetchCourses();
+  }, []);
 
   return (
-    <div className="bg-surface text-on-surface">
-      {/* Hero Section with Animation */}
+    <div className="bg-surface text-on-surface relative overflow-hidden font-body">
+      {/* Subtle Cyber Grid Background */}
+      <div className="absolute inset-0 cyber-grid-bg opacity-40 pointer-events-none" />
+
+      {/* Hero Section with Futuristic Glow & Floating Elements */}
       <motion.section
         ref={heroRef}
         initial="hidden"
         animate={isHeroInView ? "visible" : "hidden"}
         variants={fadeUp}
-        className="relative overflow-hidden py-12 px-4 sm:px-8 lg:py-20"
+        className="relative overflow-hidden pt-20 pb-16 px-4 sm:px-8 lg:pt-32 lg:pb-28"
       >
-        {/* Background Gradient */}
-        <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-primary/8 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-tertiary/6 rounded-full blur-[100px] pointer-events-none" />
+        {/* Background Ambience Orbs */}
+        <div className="absolute top-1/4 right-10 w-[600px] h-[600px] bg-primary/15 rounded-full blur-[140px] pointer-events-none animate-pulse-glow" />
+        <div className="absolute bottom-10 left-10 w-[500px] h-[500px] bg-tertiary/15 rounded-full blur-[120px] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div className="relative z-10 space-y-8">
-            <motion.span
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center relative z-10">
+          <div className="lg:col-span-7 space-y-8">
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary font-bold text-xs uppercase tracking-widest"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full cyber-glass border border-primary/40 shadow-[0_0_20px_rgba(0,85,255,0.2)]"
             >
-              Learn Any Thing And Any Where
-            </motion.span>
+              <Sparkles className="w-4 h-4 text-amber-400 animate-spin-slow" />
+              <span className="text-xs font-bold font-mono text-primary tracking-wider uppercase">
+                Next-Gen Advanced EdTech Platform
+              </span>
+            </motion.div>
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-4xl sm:text-5xl lg:text-7xl font-headline font-extrabold text-primary tracking-tight leading-[1.1]"
+              className="text-5xl sm:text-6xl lg:text-8xl font-headline font-black tracking-tighter leading-[1.05]"
             >
-              Elevate Your <br />
-              <span className="opacity-80 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                Learning Journey
+              Master The <br />
+              <span className="hologram-text font-extrabold pb-2 inline-block">
+                Future of Tech.
               </span>
             </motion.h1>
 
@@ -144,210 +161,223 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-lg text-secondary font-medium max-w-lg leading-relaxed"
+              className="text-lg sm:text-xl text-on-surface-variant font-medium max-w-xl leading-relaxed"
             >
-              Access premium courses designed by industry experts. Experience a sophisticated curriculum structured for modern professionals.
+              Experience a sophisticated, immersive curriculum structured for
+              modern developers. Built on cutting-edge practice sandboxes
+              and expert mentoring.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4 pt-4"
+              className="flex flex-col sm:flex-row gap-5 pt-4"
             >
               <Link
                 to="/catalog"
-                className="m3-pill px-10 py-4 bg-primary text-on-primary font-bold hover:scale-105 transition-transform ambient-shadow flex items-center justify-center gap-2 group text-base"
+                className="px-10 py-5 signature-gradient text-white font-headline font-extrabold rounded-2xl hover:scale-105 transition-all shadow-[0_0_35px_rgba(0,85,255,0.6)] flex items-center justify-center gap-3 group text-lg tracking-wide"
               >
-                Explore Courses
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <span>Explore Courses</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
               </Link>
-              {/* <Link
-                to="/catalog"
-                className="px-8 py-4 border border-primary/30 text-primary rounded-xl font-bold hover:bg-primary/5 transition-all flex items-center justify-center gap-2 group"
+              <Link
+                to="/verify-certificate"
+                className="px-8 py-5 cyber-glass text-primary rounded-2xl font-bold hover:bg-primary/10 hover:border-primary transition-all flex items-center justify-center gap-2 group text-base"
               >
-                <Play className="w-5 h-5" />
-                Watch Demo
-              </Link> */}
+                <ShieldCheck className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
+                <span>Verify Certificate</span>
+              </Link>
             </motion.div>
 
-            {/* Stats Row */}
+            {/* Futuristic Stats Chassis */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="flex flex-wrap gap-6 pt-4"
+              className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-primary/20"
             >
               {stats.map((stat, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <stat.icon className="w-5 h-5 text-primary/60" />
-                  <div>
-                    <p className="text-xl font-bold text-primary">{stat.value}</p>
-                    <p className="text-[10px] font-bold text-secondary uppercase tracking-wider">{stat.label}</p>
+                <div
+                  key={idx}
+                  className="cyber-glass p-4 rounded-2xl border border-primary/20 relative group hover:border-primary transition-colors"
+                >
+                  <div className="absolute top-2 right-2 opacity-20 group-hover:opacity-100 transition-opacity">
+                    <stat.icon className="w-4 h-4 text-primary" />
                   </div>
+                  <p className="text-2xl sm:text-3xl font-extrabold text-primary font-headline tracking-tight">
+                    {stat.value}
+                  </p>
+                  <p className="text-[10px] font-bold font-mono text-secondary uppercase tracking-widest mt-1">
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </motion.div>
-
-            {/* Social Proof */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="flex items-center gap-4 pt-4"
-            >
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map(i => (
-                  <img
-                    key={i}
-                    src={`https://i.pravatar.cc/300?img=${i + 10}`}
-                    className="w-10 h-10 rounded-full border-2 border-surface shadow-sm object-cover"
-                    alt="Learner"
-                    loading="lazy"
-                  />
-                ))}
-              </div>
-              <div>
-                <div className="flex text-amber-400">
-                  {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                </div>
-                <p className="text-xs font-bold text-secondary mt-1">Rated 4.9/5 by 12,000+ professionals</p>
-              </div>
-            </motion.div>
           </div>
 
-          {/* Hero Image Card */}
+          {/* Hero Holographic Image Portal */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className="relative rounded-[2rem] overflow-hidden bg-surface-container-low border border-surface-dim/20 p-1.5 sm:p-2 ambient-shadow hidden sm:block"
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="lg:col-span-5 relative hidden lg:block"
           >
-            <div className="relative rounded-3xl overflow-hidden h-[300px] sm:h-[400px] lg:h-[500px]">
-              <img
-                alt="Students Learning"
-                className="w-full h-full object-cover"
-                src="https://images.unsplash.com/photo-1629904853716-f0bc54eea481?w=3840&q=100&fm=jpg&crop=entropy&cs=tinysrgb&fit=max"
-                fetchpriority="high"
-                loading="eager"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
-              <div className="absolute bottom-6 left-6 right-6 p-6 bg-surface-container/80 backdrop-blur-xl rounded-2xl border border-surface-dim/20 flex justify-between items-center shadow-2xl">
-                <div>
-                  <p className="text-3xl font-headline font-bold text-primary leading-none mb-1">98%</p>
-                  <p className="text-[10px] font-bold text-secondary uppercase tracking-[0.2em]">Success Rate</p>
+            <div className="relative rounded-[2.5rem] overflow-hidden cyber-glass p-3 shadow-[0_0_50px_rgba(0,85,255,0.3)] border border-primary/40 animate-float">
+              <div className="relative rounded-[2rem] overflow-hidden aspect-[4/5]">
+                <img
+                  alt="Scholars at Work"
+                  className="w-full h-full object-cover scale-105"
+                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&auto=format&fit=crop&q=100"
+                  fetchpriority="high"
+                  loading="eager"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+
+                {/* Floating Hologram HUD Overlay */}
+                <div className="absolute bottom-6 left-6 right-6 p-6 cyber-glass-glow rounded-2xl flex justify-between items-center shadow-2xl">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="w-2.5 h-2.5 rounded-full bg-success animate-ping" />
+                      <span className="text-[10px] font-mono font-bold text-success uppercase tracking-widest">
+                        Course Active
+                      </span>
+                    </div>
+                    <p className="text-3xl font-headline font-black text-on-surface dark:text-white leading-none">
+                      100%
+                    </p>
+                    <p className="text-[10px] font-bold font-mono text-secondary uppercase tracking-[0.2em] mt-1">
+                      Platform Uptime
+                    </p>
+                  </div>
+                  <div className="w-14 h-14 rounded-2xl signature-gradient flex items-center justify-center shadow-[0_0_20px_rgba(0,85,255,0.8)] text-white">
+                    <Sparkles className="w-7 h-7 animate-pulse" />
+                  </div>
                 </div>
-                <Link to="" className="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center transition-transform shadow-lg">
-                  <Play className="w-5 h-5 fill-current" />
-                </Link>
               </div>
             </div>
 
-            {/* Floating badge */}
-            <div className="absolute top-5 right-5 bg-primary text-on-primary px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-              Limited Spots
+            {/* Auxiliary Floating Orbs */}
+            <div
+              className="absolute -top-6 -right-6 cyber-glass px-4 py-2.5 rounded-2xl border border-tertiary/40 shadow-xl flex items-center gap-2.5 animate-bounce"
+              style={{ animationDuration: "8s" }}
+            >
+              <Brain className="w-5 h-5 text-tertiary" />
+              <span className="text-xs font-bold font-mono text-on-surface">
+                AI Mentor Engine
+              </span>
+            </div>
+            <div
+              className="absolute -bottom-6 -left-6 cyber-glass px-4 py-2.5 rounded-2xl border border-primary/40 shadow-xl flex items-center gap-2.5 animate-bounce"
+              style={{ animationDuration: "10s" }}
+            >
+              <Video className="w-5 h-5 text-primary" />
+              <span className="text-xs font-bold font-mono text-on-surface">
+                Monaco Cloud IDE
+              </span>
             </div>
           </motion.div>
         </div>
       </motion.section>
 
-      {/* Philosophy Section */}
-      <section id="about" className="py-12 sm:py-16 px-4 sm:px-8 bg-surface-container-lowest border-y border-surface-dim/10">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-          <div className="lg:w-1/2 space-y-8">
-            <h2 className="text-4xl font-headline font-bold text-primary">Academic Authority, Digital Speed - Now for the Enterprise</h2>
-            <p className="text-secondary text-lg leading-relaxed">
-              The traditional classroom just got an upgrade. We’ve built a high-speed learning environment that cuts through the noise. With clean typography and a distraction-free layout, mastering complex material has never been more efficient. Your path to industry-recognized certification starts here.
-            </p>
-            <ul className="space-y-4">
-              {[
-                "150+ Expert Mentors from Global Firms",
-                "Certifications recognized across the tech industry",
-                 "Limited-time access to premium course assets", 
-                "24/7 Mentor Support & Community Access"
-              ].map((text, i) => (
-                <li key={i} className="flex items-center gap-3 text-on-surface font-medium group">
-                  <ShieldCheck className="w-5 h-5 text-primary group-hover:scale-110 transition-transform" />
-                  {text}
-                </li>
-              ))}
-            </ul>
-            {/* <Link to="/about" className="inline-flex items-center gap-2 text-primary font-semibold group">
-              Learn more about our mission
-              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link> */}
-          </div>
-          <div className="lg:w-1/2 grid grid-cols-2 gap-4 w-full">
-            <div className="h-48 sm:h-64 rounded-3xl bg-surface-container overflow-hidden hover:scale-105 transition-transform duration-500">
-              <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=2560&auto=format&fit=crop&q=100" className="w-full h-full object-cover" alt="Campus Life" loading="lazy" />
-            </div>
-            <div className="h-56 sm:h-72 mt-8 sm:mt-12 rounded-3xl bg-surface-container overflow-hidden hover:scale-105 transition-transform duration-500">
-              <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=2560&auto=format&fit=crop&q=100" className="w-full h-full object-cover" alt="Study" loading="lazy" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Courses Section (NEW) */}
-      <section id="courses" className="py-16 px-8 bg-surface">
+      {/* Featured Pathways Section */}
+      <section id="courses" className="py-20 px-4 sm:px-8 relative z-10">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-16 text-center max-w-2xl mx-auto">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary font-bold text-xs uppercase tracking-widest mb-4">
-              Featured Curriculum
+          <div className="mb-16 text-center max-w-3xl mx-auto">
+            <span className="neon-badge mb-4">
+              <Sparkles className="w-3.5 h-3.5" /> Flagship Programs
             </span>
-            <h2 className="text-4xl font-headline font-bold text-primary mb-4">Most Popular Pathways</h2>
-            <p className="text-secondary">Join thousands of professionals accelerating their careers with our flagship programs.</p>
+            <h2 className="text-4xl sm:text-5xl font-headline font-extrabold tracking-tight mb-4 text-primary">
+              Trending Industry Courses
+            </h2>
+            <p className="text-on-surface-variant text-lg">
+              Engineered alongside chief mentors from leading global tech
+              corporations.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {coursesLoading ? (
-              <div className="col-span-full flex justify-center py-12">
-                <Loader2 className="w-8 h-8 text-primary animate-spin" />
+              <div className="col-span-full flex justify-center py-20">
+                <Loader2 className="w-12 h-12 text-primary animate-spin" />
               </div>
             ) : featuredCourses.length > 0 ? (
               featuredCourses.map((course, idx) => (
-                <div
+                <motion.div
                   key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
                   onMouseEnter={() => setHoveredCard(idx)}
                   onMouseLeave={() => setHoveredCard(null)}
-                  className="bg-surface-container-lowest rounded-[var(--shape-extra-large)] p-6 border border-outline-variant/30 hover:border-primary/40 transition-all card-lift group"
+                  className="hi-tech-panel p-8 flex flex-col justify-between group"
                 >
+                  <div>
+                    <div className="flex justify-between items-start mb-6">
+                      <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-on-primary group-hover:rotate-12 transition-all duration-300 shadow-[0_0_15px_rgba(0,85,255,0.2)]">
+                        <Award className="w-6 h-6" />
+                      </div>
+                      <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20 capitalize tracking-wider">
+                        {course.level}
+                      </span>
+                    </div>
 
-                  <div className="flex justify-between items-start mb-4">
-                    <Sparkles className="w-8 h-8 text-primary" />
-                    <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-full capitalize">
-                      {course.level}
-                    </span>
+                    <h3 className="text-2xl font-headline font-extrabold text-on-surface group-hover:text-primary transition-colors mb-3 line-clamp-2">
+                      {course.title}
+                    </h3>
+                    <p className="text-on-surface-variant text-sm line-clamp-3 mb-6 font-medium">
+                      {course.description ||
+                        "Immersive hands-on masterclass covering end-to-end architecture and enterprise production readiness."}
+                    </p>
                   </div>
-                  <h3 className="text-xl font-headline font-bold text-on-surface group-hover:text-primary transition-colors mb-2 line-clamp-1">{course.title}</h3>
-                  <div className="flex justify-between items-center text-sm text-secondary mb-4">
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" /> {course.duration} Hours
+
+                  <div className="pt-6 border-t border-surface-dim/20 flex justify-between items-center text-sm font-bold font-mono">
+                    <span className="flex items-center gap-1.5 text-secondary">
+                      <Clock className="w-4 h-4 text-primary" />{" "}
+                      {course.duration} Hours
                     </span>
+                    <Link
+                      to={`/course/${course.id}`}
+                      className="inline-flex items-center gap-2 text-primary group-hover:gap-3 transition-all"
+                    >
+                      <span>View Course</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
                   </div>
-                  <Link
-                    to={`/course/${course.id}`}
-                    className="inline-flex items-center gap-2 text-primary font-medium text-sm group-hover:gap-3 transition-all"
-                  >
-                    Learn More <ArrowRight className="w-3 h-3" />
-                  </Link>
-                </div>
+                </motion.div>
               ))
             ) : (
-              <div className="col-span-full text-center py-12 text-secondary">
-                No courses available at the moment.
+              <div className="col-span-full text-center py-12 text-secondary font-mono bg-surface-container-low/20 rounded-2xl border border-surface-dim/10">
+                No active courses found in catalog.
               </div>
             )}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              to="/catalog"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl border border-primary/40 text-primary font-headline font-bold text-base hover:bg-primary/10 hover:border-primary hover:shadow-[0_0_25px_rgba(0,85,255,0.3)] transition-all"
+            >
+              <span>Access Complete Course Catalog</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Bento Grid Features (Enhanced) */}
-      <section className="py-16 px-8 bg-surface-container-lowest">
+      {/* Hi-Tech Bento Grid Features */}
+      <section className="py-20 px-4 sm:px-8 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16 text-center max-w-2xl mx-auto">
-            <h2 className="text-4xl font-headline font-bold text-primary mb-4">The Editorial Experience</h2>
-            <p className="text-secondary">Designed for professionals who demand high-end interfaces and unparalleled curriculum depth.</p>
+            <span className="neon-badge mb-4">Tactical Advantage</span>
+            <h2 className="text-4xl sm:text-5xl font-headline font-extrabold tracking-tight mb-4 text-primary">
+              The Path to Tech Mastery
+            </h2>
+            <p className="text-on-surface-variant text-lg font-medium">
+              Designed for learners who demand high-end interfaces and
+              unmatched curriculum depth.
+            </p>
           </div>
 
           <motion.div
@@ -355,160 +385,248 @@ export default function Home() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
             <motion.div
               variants={fadeUp}
-              className="w-full sm:col-span-2 bg-surface-container-low p-6 sm:p-10 rounded-[2rem] border border-surface-dim/20 hover:border-primary/20 transition-all group relative overflow-hidden"
+              className="md:col-span-2 hi-tech-panel p-8 sm:p-12 relative overflow-hidden flex flex-col justify-between"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
-              <Award className="w-12 h-12 text-primary mb-6 group-hover:scale-110 transition-transform" />
-              <h3 className="text-2xl font-headline font-bold mb-4">Industry Accreditation</h3>
-              <p className="text-secondary max-w-md">Our certs are designed directly with enterprise CTOs, providing immediate professional legitimacy.</p>
-              <div className="mt-6 flex items-center gap-2 text-primary text-sm font-medium">
-                Recognized by 500+ companies
-                <ArrowRight className="w-3 h-3" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+              <div>
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center text-primary mb-6 shadow-lg">
+                  <Award className="w-7 h-7" />
+                </div>
+                <h3 className="text-3xl font-headline font-extrabold mb-4 text-primary">
+                  Enterprise Accreditation
+                </h3>
+                <p className="text-on-surface-variant text-base sm:text-lg max-w-xl leading-relaxed">
+                  Our certifications are constructed directly in partnership
+                  with enterprise engineering leaders, providing undeniable
+                  professional verification on global career registries.
+                </p>
+              </div>
+              <div className="mt-8 pt-6 border-t border-primary/20 flex items-center gap-3 text-primary font-mono text-sm font-bold">
+                <span>Recognized by 500+ global engineering hubs</span>
+                <ArrowRight className="w-4 h-4" />
               </div>
             </motion.div>
 
             <motion.div
               variants={fadeUp}
-              className="w-full sm:col-span-1 bg-primary text-on-primary p-8 sm:p-10 rounded-[2rem] shadow-xl ambient-shadow flex flex-col justify-between group hover:scale-[1.02] transition-transform"
+              className="md:col-span-1 signature-gradient p-8 sm:p-12 rounded-[2.5rem] shadow-[0_0_40px_rgba(0,85,255,0.4)] text-white flex flex-col justify-between relative overflow-hidden group hover:scale-[1.02] transition-transform duration-500"
             >
-              <Brain className="w-12 h-12 mb-6 group-hover:rotate-6 transition-transform" />
+              <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+              <Brain className="w-14 h-14 mb-8 group-hover:rotate-12 transition-transform duration-500" />
               <div>
-                <h3 className="text-2xl font-headline font-bold mb-2">Expert Focus</h3>
-                <p className="opacity-80 text-sm">Mentors leading deep technical pathways from FAANG and Fortune 500.</p>
+                <h3 className="text-3xl font-headline font-extrabold mb-3">
+                  Expert Mentors
+                </h3>
+                <p className="text-white/90 font-medium text-base leading-relaxed">
+                  Direct guidance from seasoned architects leading deep
+                  technical initiatives at FAANG and Fortune 500 firms.
+                </p>
               </div>
             </motion.div>
-            <div className="md:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-              <motion.div
-                variants={fadeUp}
-                className="bg-surface-container-lowest p-10 rounded-[2rem] border border-surface-dim/20 ambient-shadow hover:shadow-xl transition-all"
-              >
-                <History className="w-10 h-10 text-primary mb-6" />
-                <h3 className="text-xl font-headline font-bold mb-2">Limited time Access</h3>
-                <p className="text-secondary text-sm">Purchase once, review forever. All future updates included.</p>
-              </motion.div>
 
-              <motion.div
-                variants={fadeUp}
-                className="bg-surface-container-lowest p-10 rounded-[2rem] border border-surface-dim/20 ambient-shadow hover:shadow-xl transition-all"
-              >
-                <Globe className="w-10 h-10 text-primary mb-6" />
-                <h3 className="text-xl font-headline font-bold mb-2">Global Network</h3>
-                <p className="text-secondary text-sm">Join 45k+ alumni worldwide across 80+ countries.</p>
-              </motion.div>
-            </div>
+            <motion.div
+              variants={fadeUp}
+              className="hi-tech-panel p-8 sm:p-10 flex flex-col justify-between"
+            >
+              <History className="w-12 h-12 text-primary mb-6" />
+              <div>
+                <h3 className="text-2xl font-headline font-extrabold mb-3 text-primary">
+                  Lifetime Access
+                </h3>
+                <p className="text-on-surface-variant text-base leading-relaxed">
+                  Enroll once, maintain access forever. All future iterative
+                  updates and curriculum enhancements included automatically.
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              variants={fadeUp}
+              className="md:col-span-2 hi-tech-panel p-8 sm:p-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-8"
+            >
+              <div className="space-y-4 max-w-lg">
+                <Globe className="w-12 h-12 text-primary" />
+                <h3 className="text-2xl font-headline font-extrabold text-primary">
+                  Global Student Network
+                </h3>
+                <p className="text-on-surface-variant text-base leading-relaxed">
+                  Join alumni spanning 80+ countries worldwide. Engage in
+                  peer code labs and architectural review boards.
+                </p>
+              </div>
+              <div className="cyber-glass p-6 rounded-2xl border border-primary/30 text-center sm:min-w-[200px]">
+                <p className="text-4xl font-black font-headline text-primary">
+                  100%
+                </p>
+                <p className="text-xs font-mono font-bold text-secondary uppercase tracking-widest mt-1">
+                  Placement Verified
+                </p>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
 
-      {/* Testimonials Section (NEW) */}
-      <section id="testimonials" className="py-16 px-8 bg-surface">
+      {/* Testimonials Hub */}
+      <section id="testimonials" className="py-20 px-4 sm:px-8 relative z-10">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16 text-center max-w-2xl mx-auto">
-            <h2 className="text-4xl font-headline font-bold text-primary mb-4">What Our Learners Say</h2>
-            <p className="text-secondary">Trusted by professionals from leading companies worldwide.</p>
+            <span className="neon-badge mb-4">Student Feedback</span>
+            <h2 className="text-4xl sm:text-5xl font-headline font-extrabold tracking-tight mb-4 text-primary">
+              What Our Students Say
+            </h2>
+            <p className="text-on-surface-variant text-lg font-medium">
+              Feedback logged from senior engineers and executives across the
+              global IT domain.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, idx) => (
-              <div
-                key={idx}
-                className="bg-surface-container-lowest rounded-[var(--shape-extra-large)] p-6 border border-outline-variant/30 hover:border-primary/30 transition-all card-lift"
-              >
-                <div className="flex text-amber-400 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => <Star key={i} className="w-4 h-4 fill-current" />)}
-                </div>
-                <p className="text-on-surface mb-6 leading-relaxed">"{testimonial.content}"</p>
-                <div className="flex items-center gap-3">
-                  <img
-                    src={testimonial.user?.avatar || `https://i.pravatar.cc/150?u=${testimonial.id || testimonial.user?.name}`}
-                    alt={testimonial.user?.name || "User"}
-                    className="w-10 h-10 rounded-full object-cover"
-                    loading="lazy"
-                  />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {testimonials.length > 0 ? (
+              testimonials.map((testimonial, idx) => (
+                <div
+                  key={idx}
+                  className="hi-tech-panel p-8 flex flex-col justify-between relative"
+                >
                   <div>
-                    <p className="font-bold text-sm">{testimonial.user?.name || "Unknown User"}</p>
+                    <div className="flex text-amber-400 mb-6 gap-1">
+                      {[...Array(testimonial.rating || 5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 fill-current" />
+                      ))}
+                    </div>
+                    <p className="text-on-surface text-base mb-8 leading-relaxed italic font-medium">
+                      "{testimonial.content || testimonial.comment}"
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-4 pt-6 border-t border-primary/20">
+                    <img
+                      src={
+                        testimonial.user?.avatar ||
+                        `https://i.pravatar.cc/150?u=${testimonial.id || testimonial.user?.name}`
+                      }
+                      alt={testimonial.user?.name || "Student"}
+                      className="w-12 h-12 rounded-2xl object-cover border border-primary/30 shadow-lg"
+                      loading="lazy"
+                    />
+                    <div>
+                      <p className="font-bold font-headline text-base text-primary">
+                        {testimonial.user?.name || "Student"}
+                      </p>
+                      <p className="text-xs font-mono text-secondary mt-0.5">
+                        {testimonial.user?.role || "Software Engineer"}
+                      </p>
+                    </div>
                   </div>
                 </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12 text-secondary font-mono text-xs bg-surface-container-low/20 rounded-2xl border border-surface-dim/10">
+                No student reviews recorded in database yet.
               </div>
-            ))}
+            )}
           </div>
-
-          {/* <div className="text-center mt-12">
-            <a href="#testimonials" className="inline-flex items-center gap-2 text-primary font-medium group">
-              Read more success stories
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-          </div> */}
         </div>
       </section>
 
-      {/* Message from the CEO Section */}
-      <section className="py-4 px-8 bg-surface">
+      {/* CEO Transmission */}
+      <section className="py-12 px-4 sm:px-8 relative z-10">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-surface-container rounded-[2rem] p-6 sm:p-10 flex flex-col lg:flex-row items-center lg:items-start gap-12 border border-outline-variant/30 shadow-sm"
+            className="hi-tech-panel p-8 sm:p-14 flex flex-col lg:flex-row items-center lg:items-start gap-12"
           >
-            {/* CEO Image */}
             <div className="w-full lg:w-1/3 max-w-[380px]">
-              <div className="rounded-3xl overflow-hidden shadow-2xl border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5">
+              <div className="rounded-[2.5rem] overflow-hidden shadow-[0_0_35px_rgba(0,85,255,0.3)] border-2 border-primary/40 relative aspect-[3/4]">
                 <img
-                  src="https://github.com/saiakhil1629/ascs_bootcamp/blob/main/WhatsApp%20Image%202026-05-17%20at%2011.16.33%20AM.jpeg?raw=true"
-                  alt="Devika Pakruthi - CEO"
-                  className="w-full h-auto max-h-[400px] object-contain"
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=80"
+                  alt="Executive Base"
+                  className="w-full h-full object-cover scale-105"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4 cyber-glass p-3 rounded-xl text-center">
+                  <span className="text-xs font-mono font-bold text-primary uppercase tracking-widest">
+                    CEO's Message
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Content */}
-            <div className="lg:w-3/4 text-on-surface space-y-4">
-              <h2 className="text-2xl font-headline font-bold text-on-surface mb-2">Message from the CEO</h2>
-              <div className="space-y-3 text-on-surface-variant leading-relaxed text-base">
+            <div className="lg:w-2/3 space-y-6">
+              <span className="neon-badge">Message From Our Founder</span>
+              <h2 className="text-3xl sm:text-4xl font-headline font-black text-primary leading-tight">
+                Bridging Academic Exposure With Production Reality
+              </h2>
+              <div className="space-y-4 text-on-surface-variant leading-relaxed text-lg font-medium">
                 <p>
-                  <span className="font-bold text-on-surface">ADHOC NETWORK LMS</span> is dedicated to a comprehensive ecosystem for trending courses from Data Analytics to AI cutting-edge cases in EdTech. We construct each course to help overcome the divide between academic exposure and world grounded experience.
+                  <strong className="text-primary">STAR LMS</strong> is
+                  engineered to eliminate the friction between foundational
+                  computer science and high-velocity commercial execution. We
+                  construct each masterclass to serve as an uncompromising
+                  benchmark of professional excellence.
                 </p>
                 <p>
-                  It gives us great joy to see our students learn the various components of professional tools to prepare them for the future. We offer a full range of trending technology courses.
-                </p>
-                <p>
-                  This empowers students to learn the skills needed to succeed in the global IT domain.
+                  Our mission is to empower developers, learners, and
+                  architects with deep, practical mastery over complex
+                  distributed systems, autonomous agents, and enterprise cloud
+                  infrastructure.
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-outline-variant/30">
-                <p className="text-xl font-bold text-on-surface">Devika Pakruthi</p>
-                <p className="text-on-surface-variant font-medium">Chief Executive Officer</p>
-                <p className="text-secondary text-sm font-bold uppercase tracking-wider">ADHOC NETWORK</p>
+              <div className="pt-8 border-t border-primary/20 flex justify-between items-end">
+                <div>
+                  <p className="text-2xl font-black font-headline text-primary">
+                    {leaderName}
+                  </p>
+                  <p className="text-sm font-mono font-bold text-secondary uppercase tracking-widest mt-1">
+                    Chief Executive Officer • STAR LMS
+                  </p>
+                </div>
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/30">
+                  <ShieldCheck className="w-6 h-6" />
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* CTA Section (NEW) */}
-      <section className="py-12 px-4 sm:px-8 signature-gradient-cta">
-        <div className="max-w-4xl mx-auto text-center text-white">
-          <h2 className="text-4xl font-headline font-bold mb-4">Ready to Elevate Your Career?</h2>
-          <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
-             Join an exclusive community of professionals transforming their careers with our premium courses.
+      {/* Hi-Tech CTA Section */}
+      <section className="py-20 px-4 sm:px-8 relative z-10">
+        <div className="max-w-5xl mx-auto text-center cyber-glass p-12 sm:p-20 rounded-[3rem] border border-primary/40 shadow-[0_0_80px_rgba(0,85,255,0.25)] relative overflow-hidden">
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[100px] pointer-events-none animate-pulse-glow" />
+          <h2 className="text-4xl sm:text-6xl font-headline font-black tracking-tight mb-6 text-primary">
+            Ready to Start Your Next Course?
+          </h2>
+          <p className="text-lg sm:text-xl text-on-surface-variant max-w-2xl mx-auto mb-10 font-medium">
+            Join thousands of engineering professionals transforming their
+            capabilities with our flagship curriculum.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
             <Link
               to="/catalog"
-              className="px-8 py-3 border-2 border-white/30 bg-primary text-on-primary rounded-xl font-bold hover:scale-105 transition-transform shadow-lg"
+              className="px-10 py-5 signature-gradient text-white font-headline font-extrabold rounded-2xl text-lg hover:scale-105 shadow-[0_0_35px_rgba(0,85,255,0.6)] transition-all flex items-center gap-3 group"
             >
-              Browse All Courses
+              <span>Explore All Courses</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+            </Link>
+            <Link
+              to="/auth/register"
+              className="px-10 py-5 cyber-glass border border-primary text-primary font-headline font-extrabold rounded-2xl text-lg hover:bg-primary/15 transition-all shadow-[0_0_20px_rgba(0,85,255,0.2)]"
+            >
+              <span>Sign Up & Start Learning</span>
             </Link>
           </div>
-          <p className="text-xs opacity-70 mt-6">No credit card required • Cancel anytime</p>
+          <p className="text-xs font-mono font-bold text-secondary uppercase tracking-widest mt-8">
+            Secure Portal • Comprehensive Placement Support
+          </p>
         </div>
       </section>
     </div>
-  )
+  );
 }

@@ -6,7 +6,7 @@ This guide outlines the standard workflow for contributing to the repository. **
 
 Run this once to get the project on your machine.
 
-``` powershell
+```powershell
 git clone https://github.com/srivenkateshnadapana/adhoc_test_lms.git
 cd adhoc_test_lms
 ```
@@ -15,7 +15,7 @@ cd adhoc_test_lms
 
 Always sync with the main codebase before starting new changes.
 
-``` powershell
+```powershell
 # Sync main branch
 git checkout main
 git pull origin main
@@ -28,7 +28,7 @@ git checkout -b feature/your-feature-name
 
 Save your progress locally.
 
-``` powershell
+```powershell
 # Check modified files
 git status
 
@@ -41,7 +41,7 @@ git commit -m "feat: description of your changes"
 
 Ensure your branch is up-to-date with any changes others might have pushed to the main repository.
 
-``` powershell
+```powershell
 # Pull latest main into your feature branch to resolve conflicts locally
 git pull origin main
 
@@ -52,20 +52,21 @@ git pull origin main
 
 Publish your branch to the remote repository. **Do not attempt to merge into `main` locally.**
 
-``` powershell
+```powershell
 # Publish your feature branch
 git push origin feature/your-feature-name
 ```
 
 **After pushing:**
+
 1. Navigate to the [GitHub Repository](https://github.com/srivenkateshnadapana/adhoc_test_lms).
 2. You will see a notification to "Compare & pull request" for your recently pushed branch.
 3. Click it, provide a description of your changes, and submit the Pull Request for review.
 
 ## 6. Helpful Commands
 
--   `git branch` : List local branches
--   `git log --oneline` : View commit history
--   `git stash` : Save uncommitted changes for later
--   `git stash pop` : Restore stashed changes
--   `git checkout branch-name` : Switch between branches
+- `git branch` : List local branches
+- `git log --oneline` : View commit history
+- `git stash` : Save uncommitted changes for later
+- `git stash pop` : Restore stashed changes
+- `git checkout branch-name` : Switch between branches

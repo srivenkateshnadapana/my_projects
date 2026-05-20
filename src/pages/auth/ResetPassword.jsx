@@ -1,55 +1,65 @@
-import * as React from "react"
-import { Link, useParams, useNavigate } from "react-router-dom"
-import { Lock, ArrowRight, Eye, EyeOff, Loader2, CheckCircle2 } from "lucide-react"
-import { StorageService } from "../../services/storage"
+import * as React from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import {
+  Lock,
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Loader2,
+  CheckCircle2,
+} from "lucide-react";
+import { StorageService } from "../../services/storage";
 
 export default function ResetPassword() {
-  const { token } = useParams()
-  const navigate = useNavigate()
-  
-  const [password, setPassword] = React.useState("")
-  const [confirmPassword, setConfirmPassword] = React.useState("")
-  const [showPassword, setShowPassword] = React.useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false)
-  
-  const [loading, setLoading] = React.useState(false)
-  const [error, setError] = React.useState("")
-  const [success, setSuccess] = React.useState(false)
+  const { token } = useParams();
+  const navigate = useNavigate();
+
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [success, setSuccess] = React.useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (password.length < 6) {
-      setError("Password must be at least 6 characters long.")
-      return
+      setError("Password must be at least 6 characters long.");
+      return;
     }
-    
+
     if (password !== confirmPassword) {
-      setError("Passwords do not match.")
-      return
+      setError("Passwords do not match.");
+      return;
     }
-    
-    setLoading(true)
-    setError("")
+
+    setLoading(true);
+    setError("");
 
     try {
-      const result = await StorageService.resetPassword(token, password)
+      const result = await StorageService.resetPassword(token, password);
 
       if (result.success) {
-        setSuccess(true)
+        setSuccess(true);
         // Automatically redirect to login after a few seconds
         setTimeout(() => {
-          navigate('/login')
-        }, 3000)
+          navigate("/login");
+        }, 3000);
       } else {
-        setError(result.message || "Failed to reset password. The link might be expired.")
+        setError(
+          result.message ||
+            "Failed to reset password. The link might be expired.",
+        );
       }
     } catch (err) {
-      setError("Network error. Please try again.")
+      setError("Network error. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (success) {
     return (
@@ -58,11 +68,14 @@ export default function ResetPassword() {
           <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-6">
             <CheckCircle2 className="w-8 h-8 text-green-500" />
           </div>
-          <h2 className="text-2xl font-headline font-bold text-primary mb-4">Password Reset Successfully</h2>
+          <h2 className="text-2xl font-headline font-bold text-primary mb-4">
+            Password Reset Successfully
+          </h2>
           <p className="text-secondary mb-8">
-            Your password has been successfully updated. You will be redirected to the login page shortly.
+            Your password has been successfully updated. You will be redirected
+            to the login page shortly.
           </p>
-          <Link 
+          <Link
             to="/login"
             className="block w-full py-3 signature-gradient text-white rounded-xl font-bold transition-all"
           >
@@ -70,7 +83,7 @@ export default function ResetPassword() {
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -79,9 +92,13 @@ export default function ResetPassword() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 signature-gradient rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <span className="text-white font-headline font-bold text-2xl">A</span>
+            <span className="text-white font-headline font-bold text-2xl">
+              A
+            </span>
           </div>
-          <h1 className="text-3xl font-headline font-bold text-primary mb-2">Create New Password</h1>
+          <h1 className="text-3xl font-headline font-bold text-primary mb-2">
+            Create New Password
+          </h1>
           <p className="text-secondary">Please enter your new password below</p>
         </div>
 
@@ -108,7 +125,11 @@ export default function ResetPassword() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-secondary hover:text-primary transition"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -133,7 +154,11 @@ export default function ResetPassword() {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-secondary hover:text-primary transition"
                 >
-                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -167,12 +192,15 @@ export default function ResetPassword() {
 
           {/* Back to Login */}
           <div className="mt-6 text-center">
-            <Link to="/login" className="text-primary font-bold hover:underline text-sm">
+            <Link
+              to="/login"
+              className="text-primary font-bold hover:underline text-sm"
+            >
               Back to Login
             </Link>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

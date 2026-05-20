@@ -1,13 +1,13 @@
 // src/components/course/SearchFilterBar.jsx
-import * as React from "react"
-import { Search } from "lucide-react"
+import * as React from "react";
+import { Search } from "lucide-react";
 
-export function SearchFilterBar({ 
-  searchQuery, 
-  onSearchChange, 
-  activeCategory, 
+export function SearchFilterBar({
+  searchQuery,
+  onSearchChange,
+  activeCategory,
   onCategoryChange,
-  categories 
+  categories,
 }) {
   return (
     <div className="mb-8 space-y-4">
@@ -37,11 +37,13 @@ export function SearchFilterBar({
           >
             {category.label}
             {category.id !== "all" && (
-              <span className="ml-1 text-xs opacity-70">({category.count})</span>
+              <span className="ml-1 text-xs opacity-70">
+                ({category.count})
+              </span>
             )}
           </button>
         ))}
       </div>
     </div>
-  )
+  );
 }

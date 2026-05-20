@@ -1,27 +1,38 @@
 // src/components/layout/Header.jsx
-import * as React from "react"
-import { Link, useNavigate, useLocation } from "react-router-dom"
-import { Menu, X, LogOut, Sun, Moon, User, BookOpen, Award, Settings, Gift, MessageCircle, ChevronDown, LayoutDashboard } from "lucide-react"
-import { AnimatePresence, motion } from "framer-motion"
-import { StorageService } from "../../services/storage"
+import * as React from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import {
+  Menu,
+  X,
+  LogOut,
+  Sun,
+  Moon,
+  User,
+  BookOpen,
+  Award,
+  Settings,
+  Gift,
+  MessageCircle,
+  ChevronDown,
+  LayoutDashboard,
+} from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { StorageService } from "../../services/storage";
 
 const PUBLIC_NAV_ITEMS = [
   { href: "/", label: "Home" },
   { href: "/catalog", label: "Courses" },
   { href: "/blog", label: "Blog" },
   { href: "/verify-certificate", label: "Certificate Verification" },
-]
+];
 
 const PRIVATE_NAV_ITEMS = [
   { href: "/", label: "Home" },
   { href: "/catalog", label: "Courses" },
-  { href: "/blog", label: "Blog" },
-  { href: "/my-courses", label: "My Courses" },
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/certificates", label: "Certificates" },
   { href: "/student/codelab", label: "CodeLab" },
-  { href: "/my-doubts", label: "Doubts" },
-]
+  { href: "/blog", label: "Blog" },
+];
 
 const DROPDOWN_ITEMS = [
   { href: "/profile", label: "Profile", icon: User },
@@ -31,19 +42,21 @@ const DROPDOWN_ITEMS = [
   { href: "/settings", label: "Settings", icon: Settings },
   { href: "/referral", label: "Refer & Earn", icon: Gift },
   { href: "/feedback", label: "Feedback", icon: MessageCircle },
-]
+];
 
-import { authStore } from "../../utils/authStore"
+import { authStore } from "../../utils/authStore";
 
 export function Header() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [isOpen, setIsOpen] = React.useState(false)
-  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false)
-  const [isAtTop, setIsAtTop] = React.useState(true)
-  const [authState, setAuthState] = React.useState(authStore.getState())
-  const [theme, setTheme] = React.useState(localStorage.getItem('theme') || 'light')
-  const dropdownRef = React.useRef(null)
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const [isAtTop, setIsAtTop] = React.useState(true);
+  const [authState, setAuthState] = React.useState(authStore.getState());
+  const [theme, setTheme] = React.useState(
+    localStorage.getItem("theme") || "light",
+  );
+  const dropdownRef = React.useRef(null);
 
   React.useEffect(() => {
     // Initial sync
@@ -55,144 +68,186 @@ export function Header() {
     });
 
     return unsubscribe;
-  }, [])
-
-
-  React.useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark')
-    localStorage.setItem('theme', theme)
-  }, [theme])
+  }, []);
 
   React.useEffect(() => {
-    const syncTheme = () => setTheme(localStorage.getItem('theme') || 'light')
-    window.addEventListener('themeSync', syncTheme)
-    return () => window.removeEventListener('themeSync', syncTheme)
-  }, [])
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   React.useEffect(() => {
-    const update = () => setIsAtTop(window.scrollY === 0)
-    update()
-    window.addEventListener("scroll", update, { passive: true })
-    return () => window.removeEventListener("scroll", update)
-  }, [])
+    const syncTheme = () => setTheme(localStorage.getItem("theme") || "light");
+    window.addEventListener("themeSync", syncTheme);
+    return () => window.removeEventListener("themeSync", syncTheme);
+  }, []);
+
+  React.useEffect(() => {
+    const update = () => setIsAtTop(window.scrollY === 0);
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    return () => window.removeEventListener("scroll", update);
+  }, []);
 
   React.useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsDropdownOpen(false)
+        setIsDropdownOpen(false);
       }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleToggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark"
-    setTheme(newTheme)
-    document.documentElement.classList.toggle('dark', newTheme === 'dark')
-    localStorage.setItem('theme', newTheme)
-    window.dispatchEvent(new Event('themeSync'))
-  }
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    document.documentElement.classList.toggle("dark", newTheme === "dark");
+    localStorage.setItem("theme", newTheme);
+    window.dispatchEvent(new Event("themeSync"));
+  };
 
   const handleSignOut = () => {
-    StorageService.logout()
-    setIsOpen(false)
-    setIsDropdownOpen(false)
-    navigate("/auth")
-  }
+    StorageService.logout();
+    setIsOpen(false);
+    setIsDropdownOpen(false);
+    navigate("/auth");
+  };
 
-  const { isAuthenticated, user } = authState
+  const { isAuthenticated, user } = authState;
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all ${isAtTop ? 'glass-surface bg-background/70' : 'bg-surface-container border-b border-outline-variant/30 shadow-sm'}`} style={{transitionTimingFunction:'cubic-bezier(0.2,0,0,1)',transitionDuration:'300ms'}}>
-      <div className="flex justify-between items-center w-full px-4 sm:px-8 py-4 max-w-7xl mx-auto">
+    <nav
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ${isAtTop ? "bg-transparent py-4" : "py-2.5 bg-background/85 backdrop-blur-2xl border-b border-primary/20 shadow-[0_10px_35px_-10px_rgba(0,85,255,0.3)]"}`}
+    >
+      <div className="flex justify-between items-center w-full px-4 sm:px-8 py-2 max-w-7xl mx-auto">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 sm:gap-4 group">
-          <div className="w-10 h-10 bg-primary rounded-[var(--shape-extra-large)] flex items-center justify-center shadow-lg group-hover:scale-105 shape-morph transition-transform">
-            <span className="text-on-primary font-headline font-bold text-xl">A</span>
+        <Link to="/" className="flex items-center gap-3 group">
+          <div className="w-10 h-10 signature-gradient rounded-2xl flex items-center justify-center shadow-[0_0_25px_rgba(0,85,255,0.6)] group-hover:rotate-12 transition-all duration-500">
+            <span className="text-white font-headline font-extrabold text-xl tracking-wider">
+              ★
+            </span>
           </div>
-          <span className="text-xl font-bold tracking-tight text-primary font-headline">ADHOC LMS</span>
+          <div className="flex flex-col">
+            <span className="text-2xl font-extrabold tracking-tighter hologram-text font-headline leading-none">
+              STAR LMS
+            </span>
+            <span className="text-[9px] font-mono tracking-[0.35em] uppercase text-primary font-bold mt-0.5">
+              Student Portal
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center gap-6 font-headline font-medium">
-          {(isAuthenticated ? PRIVATE_NAV_ITEMS : PUBLIC_NAV_ITEMS).map((item) => (
-            <Link
-              key={item.href}
-              to={item.href}
-              className={`text-on-surface-variant hover:text-primary transition-m3-standard px-4 py-2 rounded-[var(--shape-full)] state-layer-primary ${location.pathname === item.href ? 'bg-primary-container text-on-primary-container font-medium' : ''}`}
-            >
-              {item.label}
-            </Link>
-          ))}
+        <div className="hidden lg:flex items-center gap-0.5 xl:gap-1 bg-surface-container-low/80 backdrop-blur-xl px-2.5 py-1.5 rounded-full border border-primary/20 shadow-inner font-headline text-xs xl:text-sm font-semibold">
+          {(isAuthenticated ? PRIVATE_NAV_ITEMS : PUBLIC_NAV_ITEMS).map(
+            (item) => (
+              <Link
+                key={item.href}
+                to={item.href}
+                className={`px-3 xl:px-4 py-2 rounded-full transition-all duration-300 relative group whitespace-nowrap ${location.pathname === item.href ? "bg-primary text-on-primary shadow-[0_0_20px_rgba(0,85,255,0.6)] font-bold scale-105" : "text-on-surface hover:text-primary"}`}
+              >
+                {item.label}
+                {location.pathname !== item.href && (
+                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-all scale-0 group-hover:scale-100"></span>
+                )}
+              </Link>
+            ),
+          )}
         </div>
 
         {/* Desktop Actions */}
         <div className="hidden lg:flex items-center gap-4">
           <button
             onClick={handleToggleTheme}
-            className="p-3 bg-secondary-container text-on-secondary-container rounded-[var(--shape-full)] hover:opacity-90 transition-m3-standard shape-morph"
+            className="w-10 h-10 bg-surface-container-low border border-primary/30 text-primary rounded-full flex items-center justify-center hover:bg-primary/20 hover:scale-110 hover:shadow-[0_0_15px_rgba(0,85,255,0.4)] transition-all duration-300"
             aria-label="Toggle theme"
           >
-            {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            {theme === "dark" ? (
+              <Sun className="h-5 w-5 text-amber-400 animate-spin-slow" />
+            ) : (
+              <Moon className="h-5 w-5 text-primary animate-pulse" />
+            )}
           </button>
 
           {!isAuthenticated ? (
             <>
-              <Link to="/auth" className="m3-pill px-6 py-2 text-primary font-bold hover:bg-primary-container/50 state-layer-primary">Login</Link>
-              <Link to="/auth/register" className="m3-pill px-8 py-2 bg-primary text-on-primary font-bold shadow-md hover:shadow-lg transition-m3-emphasized">Sign Up</Link>
+              <Link
+                to="/auth"
+                className="px-5 py-2.5 rounded-full border border-primary/40 text-primary font-bold text-sm hover:bg-primary/10 hover:border-primary hover:shadow-[0_0_20px_rgba(0,85,255,0.3)] transition-all"
+              >
+                Login
+              </Link>
+              <Link
+                to="/auth/register"
+                className="px-6 py-2.5 rounded-full signature-gradient text-white font-bold text-sm shadow-[0_0_20px_rgba(0,85,255,0.5)] hover:scale-105 hover:shadow-[0_0_30px_rgba(0,85,255,0.8)] transition-all flex items-center gap-1.5"
+              >
+                <span>Student Portal</span>
+              </Link>
             </>
           ) : (
-
             <div className="flex items-center gap-4">
-              {user?.role === 'admin' && (
-                <Link to="/admin" className="px-4 py-1.5 border border-primary text-primary rounded-lg text-xs font-bold hover:bg-primary/5 transition-all uppercase tracking-widest">
-                  Admin Console
+              {user?.role === "admin" && (
+                <Link
+                  to="/admin"
+                  className="px-4 py-1.5 border border-primary/50 text-primary bg-primary/10 rounded-xl text-xs font-bold hover:bg-primary/20 hover:shadow-[0_0_15px_rgba(0,85,255,0.4)] transition-all uppercase tracking-widest flex items-center gap-1.5"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5" /> Admin Dashboard
                 </Link>
               )}
-              
+
               {/* User Dropdown */}
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="flex items-center gap-2 p-1 rounded-full hover:bg-surface-container-high transition"
+                  className="flex items-center gap-2 p-1 pl-2 bg-surface-container-low border border-primary/30 rounded-full hover:border-primary hover:shadow-[0_0_15px_rgba(0,85,255,0.3)] transition-all"
                 >
-                  <div className="w-9 h-9 bg-primary rounded-full flex items-center justify-center">
-                    <span className="text-on-primary text-sm font-bold">
-                      {user?.name?.charAt(0).toUpperCase() || 'U'}
+                  <span className="text-xs font-bold text-on-surface max-w-[100px] truncate">
+                    {user?.full_name || user?.name || "Student"}
+                  </span>
+                  <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(0,85,255,0.5)]">
+                    <span className="text-on-primary text-xs font-extrabold">
+                      {(user?.full_name || user?.name)
+                        ?.charAt(0)
+                        .toUpperCase() || "U"}
                     </span>
                   </div>
-                  <ChevronDown className={`w-4 h-4 text-on-surface-variant transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-primary transition-transform duration-300 mr-1 ${isDropdownOpen ? "rotate-180" : ""}`}
+                  />
                 </button>
 
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-56 bg-surface-container-high rounded-[var(--shape-extra-large)] shadow-lg border border-outline-variant/50 overflow-hidden z-50" style={{boxShadow:'var(--elevation-3)'}}>
-                    <div className="px-4 py-3 border-b border-outline-variant">
-                      <p className="text-sm font-semibold text-on-surface">{user?.name}</p>
-                      <p className="text-xs text-on-surface-variant">{user?.email}</p>
+                  <div className="absolute right-0 mt-3 w-64 cyber-glass-glow rounded-2xl overflow-hidden z-50 border border-primary/40 animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="px-5 py-4 border-b border-primary/20 bg-primary/5">
+                      <p className="text-sm font-bold text-on-surface">
+                        {user?.full_name || user?.name}
+                      </p>
+                      <p className="text-xs font-mono text-primary mt-0.5">
+                        {user?.email}
+                      </p>
                     </div>
-                    
-                    <div className="py-1">
+
+                    <div className="py-2">
                       {DROPDOWN_ITEMS.map((item) => (
                         <Link
                           key={item.href}
                           to={item.href}
-                          className="flex items-center gap-3 px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high transition"
+                          className="flex items-center gap-3 px-5 py-2.5 text-sm font-medium text-on-surface hover:bg-primary/15 hover:text-primary transition-all group"
                           onClick={() => setIsDropdownOpen(false)}
                         >
-                          <item.icon className="w-4 h-4" />
+                          <item.icon className="w-4 h-4 text-primary group-hover:scale-110 transition-transform" />
                           {item.label}
                         </Link>
                       ))}
                     </div>
-                    
-                    <div className="border-t border-outline-variant py-1">
+
+                    <div className="border-t border-primary/20 p-2 bg-error/5">
                       <button
                         onClick={handleSignOut}
-                        className="flex items-center gap-3 w-full px-4 py-2 text-sm text-error hover:bg-error-container transition"
+                        className="flex items-center justify-center gap-2 w-full px-4 py-2 text-sm font-bold text-error bg-error/10 hover:bg-error hover:text-on-error rounded-xl transition-all shadow-[0_0_10px_rgba(255,0,0,0.2)]"
                       >
                         <LogOut className="w-4 h-4" />
-                        Sign Out
+                        Logout
                       </button>
                     </div>
                   </div>
@@ -205,10 +260,10 @@ export function Header() {
         {/* Mobile Menu Button */}
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-md p-2 text-on-surface hover:bg-surface-dim lg:hidden"
+          className="inline-flex items-center justify-center rounded-xl p-2.5 border border-primary/30 text-primary bg-surface-container hover:bg-primary/10 hover:shadow-[0_0_15px_rgba(0,85,255,0.3)] transition-all lg:hidden"
           onClick={() => setIsOpen((prev) => !prev)}
         >
-          {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
       </div>
 
@@ -216,73 +271,121 @@ export function Header() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="lg:hidden bg-surface border-t border-surface-dim"
+            className="lg:hidden bg-background/95 backdrop-blur-2xl border-t border-primary/20 shadow-2xl"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.05, 0.7, 0.1, 1] }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-            <div className="flex flex-col gap-1 px-4 py-3">
-            <button
-              onClick={() => {
-                handleToggleTheme()
-                setIsOpen(false)
-              }}
-              className="rounded-md px-3 py-2 text-sm font-medium text-on-surface hover:bg-surface-dim text-left flex items-center gap-2"
-            >
-              {theme === "dark" ? <Sun className="h-4 w-4 text-yellow-500" /> : <Moon className="h-4 w-4 text-primary" />}
-              {theme === "dark" ? "Light Mode" : "Dark Mode"}
-            </button>
+            <div className="flex flex-col gap-2 p-6 max-w-lg mx-auto space-y-1">
+              <button
+                onClick={() => {
+                  handleToggleTheme();
+                  setIsOpen(false);
+                }}
+                className="w-full p-3 rounded-xl border border-primary/30 text-primary bg-primary/5 font-bold text-sm text-left flex items-center justify-between shadow-[0_0_15px_rgba(0,85,255,0.2)]"
+              >
+                <span className="flex items-center gap-2">
+                  {theme === "dark" ? (
+                    <Sun className="h-5 w-5 text-amber-400 animate-spin-slow" />
+                  ) : (
+                    <Moon className="h-5 w-5 text-primary animate-pulse" />
+                  )}
+                  {theme === "dark" ? "Light Mode" : "Dark Mode"}
+                </span>
+                <span className="text-[10px] uppercase font-mono tracking-widest bg-primary/20 px-2 py-0.5 rounded">
+                  Toggle
+                </span>
+              </button>
 
-            <div className="border-t border-surface-dim my-2"></div>
+              <div className="border-t border-primary/20 my-3"></div>
 
-            {(isAuthenticated ? PRIVATE_NAV_ITEMS : PUBLIC_NAV_ITEMS).map((item) => (
+              {(isAuthenticated
+                ? [
+                    ...PRIVATE_NAV_ITEMS,
+                    { href: "/my-courses", label: "My Courses" },
+                    { href: "/certificates", label: "Certificates" },
+                    { href: "/my-doubts", label: "My Doubts" },
+                  ]
+                : PUBLIC_NAV_ITEMS
+              ).map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className="rounded-xl px-4 py-3 text-base font-bold text-on-surface hover:bg-primary/15 hover:text-primary transition-all border border-transparent hover:border-primary/30 flex items-center justify-between"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <span>{item.label}</span>
+                  <ChevronDown className="-rotate-90 w-4 h-4 text-primary opacity-60" />
+                </Link>
+              ))}
+
+              <div className="border-t border-primary/20 my-3"></div>
+
               <Link
-                key={item.href}
-                to={item.href}
-                className="rounded-md px-3 py-2 text-sm font-medium text-on-surface hover:bg-surface-dim"
+                to="/settings"
+                className="rounded-xl px-4 py-2.5 text-sm font-semibold text-on-surface-variant hover:bg-primary/10 hover:text-primary transition-all flex items-center gap-3"
                 onClick={() => setIsOpen(false)}
               >
-                {item.label}
+                <Settings className="w-4 h-4 text-primary" /> Settings
               </Link>
-            ))}
-              
-              <Link to="/settings" className="rounded-md px-3 py-2 text-sm font-medium text-on-surface hover:bg-surface-dim" onClick={() => setIsOpen(false)}>
-                Settings
+              <Link
+                to="/referral"
+                className="rounded-xl px-4 py-2.5 text-sm font-semibold text-on-surface-variant hover:bg-primary/10 hover:text-primary transition-all flex items-center gap-3"
+                onClick={() => setIsOpen(false)}
+              >
+                <Gift className="w-4 h-4 text-primary" /> Refer & Earn
               </Link>
-              <Link to="/referral" className="rounded-md px-3 py-2 text-sm font-medium text-on-surface hover:bg-surface-dim" onClick={() => setIsOpen(false)}>
-                Refer & Earn
+              <Link
+                to="/feedback"
+                className="rounded-xl px-4 py-2.5 text-sm font-semibold text-on-surface-variant hover:bg-primary/10 hover:text-primary transition-all flex items-center gap-3"
+                onClick={() => setIsOpen(false)}
+              >
+                <MessageCircle className="w-4 h-4 text-primary" /> Feedback
               </Link>
-              <Link to="/feedback" className="rounded-md px-3 py-2 text-sm font-medium text-on-surface hover:bg-surface-dim" onClick={() => setIsOpen(false)}>
-                Feedback
-              </Link>
-              
-              
+
+              <div className="border-t border-primary/20 my-3"></div>
+
               {!isAuthenticated ? (
-                <>
-                  <Link to="/auth" className="mt-1 rounded-md px-3 py-2 text-sm font-semibold text-primary hover:bg-surface-dim" onClick={() => setIsOpen(false)}>
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                  <Link
+                    to="/auth"
+                    className="rounded-xl px-4 py-3 text-sm font-bold border border-primary text-primary text-center hover:bg-primary/10 shadow-[0_0_15px_rgba(0,85,255,0.2)]"
+                    onClick={() => setIsOpen(false)}
+                  >
                     Login
                   </Link>
-                  <Link to="/auth/register" className="mt-1 rounded-md px-3 py-2 text-sm font-semibold text-primary hover:bg-surface-dim" onClick={() => setIsOpen(false)}>
+                  <Link
+                    to="/auth/register"
+                    className="rounded-xl px-4 py-3 text-sm font-bold signature-gradient text-white text-center shadow-[0_0_20px_rgba(0,85,255,0.5)]"
+                    onClick={() => setIsOpen(false)}
+                  >
                     Sign Up
                   </Link>
-                </>
+                </div>
               ) : (
-                <>
-                  {user?.role === 'admin' && (
-                    <Link to="/admin" className="rounded-md px-3 py-2 text-sm font-medium text-primary hover:bg-surface-dim" onClick={() => setIsOpen(false)}>
-                      Admin Console
+                <div className="flex flex-col gap-2 pt-2">
+                  {user?.role === "admin" && (
+                    <Link
+                      to="/admin"
+                      className="rounded-xl px-4 py-3 text-sm font-bold bg-primary/20 border border-primary text-primary text-center uppercase tracking-widest shadow-[0_0_15px_rgba(0,85,255,0.3)] flex items-center justify-center gap-2"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <LayoutDashboard className="w-4 h-4" /> Admin Dashboard
                     </Link>
                   )}
-                  <button onClick={handleSignOut} className="mt-1 rounded-md px-3 py-2 text-left text-sm font-semibold text-error hover:bg-error-container">
-                    Sign Out
+                  <button
+                    onClick={handleSignOut}
+                    className="rounded-xl px-4 py-3 text-center text-sm font-bold text-error bg-error/10 border border-error/30 hover:bg-error hover:text-on-error transition-all shadow-[0_0_15px_rgba(255,0,0,0.2)] flex items-center justify-center gap-2"
+                  >
+                    <LogOut className="w-4 h-4" /> Logout
                   </button>
-                </>
+                </div>
               )}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
     </nav>
-  )
+  );
 }

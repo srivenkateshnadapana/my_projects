@@ -1,73 +1,82 @@
 // src/pages/auth/Register.jsx
-import * as React from "react"
-import { Link, useNavigate, useLocation } from "react-router-dom"
-import { User, Mail, Lock, ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react"
-import { StorageService } from "../../services/storage"
+import * as React from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import {
+  User,
+  Mail,
+  Lock,
+  ArrowRight,
+  Eye,
+  EyeOff,
+  Loader2,
+} from "lucide-react";
+import { StorageService } from "../../services/storage";
 
 export default function Register() {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = React.useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
     confirmPassword: "",
-    referralCode: ""
-  })
+    referralCode: "",
+  });
 
   React.useEffect(() => {
-    const params = new URLSearchParams(location.search)
-    const ref = params.get('ref')
+    const params = new URLSearchParams(location.search);
+    const ref = params.get("ref");
     if (ref) {
-      setFormData(prev => ({ ...prev, referralCode: ref }))
+      setFormData((prev) => ({ ...prev, referralCode: ref }));
     }
-  }, [location])
-  const [loading, setLoading] = React.useState(false)
-  const [error, setError] = React.useState("")
-  const [showPassword, setShowPassword] = React.useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false)
+  }, [location]);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match")
-      setLoading(false)
-      return
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
     }
 
     if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters")
-      setLoading(false)
-      return
+      setError("Password must be at least 6 characters");
+      setLoading(false);
+      return;
     }
 
     try {
       const result = await StorageService.register({
-        name: formData.name,
+        name: `${formData.firstName.trim()} ${formData.lastName.trim()}`,
         email: formData.email,
         password: formData.password,
         role: "student",
-        referralCode: formData.referralCode
-      })
-      
+        referralCode: formData.referralCode,
+      });
+
       if (result.success) {
-        navigate("/dashboard")
+        navigate("/dashboard");
       } else {
-        setError(result.message || "Registration failed. Please try again.")
+        setError(result.message || "Registration failed. Please try again.");
       }
     } catch (err) {
-      setError("Network error. Please try again.")
+      setError("Network error. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-surface flex items-center justify-center px-4 py-12">
@@ -75,31 +84,54 @@ export default function Register() {
         {/* Logo/Brand */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 signature-gradient rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <span className="text-white font-headline font-bold text-2xl">A</span>
+            <span className="text-white font-headline font-bold text-2xl">
+              A
+            </span>
           </div>
-          <h1 className="text-3xl font-headline font-bold text-primary mb-2">Create Account</h1>
+          <h1 className="text-3xl font-headline font-bold text-primary mb-2">
+            Create Account
+          </h1>
           <p className="text-secondary">Start your learning journey today</p>
         </div>
 
         {/* Register Form */}
         <div className="bg-surface-container-lowest rounded-3xl p-8 border border-surface-dim/20 shadow-xl">
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Name Field */}
-            <div>
-              <label className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">
-                Full Name
-              </label>
-              <div className="relative">
-                <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-secondary" />
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full pl-12 pr-4 py-3 bg-surface-container rounded-xl border border-surface-dim/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-on-surface placeholder:text-secondary"
-                  placeholder="John Doe"
-                  required
-                />
+            {/* Name Fields */}
+            <div className="flex gap-4">
+              <div className="w-1/2">
+                <label className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">
+                  First Name
+                </label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-secondary" />
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    className="w-full pl-12 pr-4 py-3 bg-surface-container rounded-xl border border-surface-dim/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-on-surface placeholder:text-secondary"
+                    placeholder="First Name"
+                    required
+                  />
+                </div>
+              </div>
+              <div className="w-1/2">
+                <label className="block text-xs font-bold text-secondary uppercase tracking-wider mb-2">
+                  Last Name
+                </label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-secondary" />
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    className="w-full pl-12 pr-4 py-3 bg-surface-container rounded-xl border border-surface-dim/20 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-on-surface placeholder:text-secondary"
+                    placeholder="Last Name"
+                    required
+                  />
+                </div>
               </div>
             </div>
 
@@ -140,10 +172,17 @@ export default function Register() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowPassword((prev) => !prev);
+                  }}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-secondary hover:text-primary transition"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -166,10 +205,17 @@ export default function Register() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowConfirmPassword((prev) => !prev);
+                  }}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-secondary hover:text-primary transition"
                 >
-                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -180,7 +226,9 @@ export default function Register() {
                 Referral Code (Optional)
               </label>
               <div className="relative">
-                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-secondary font-bold text-sm">#</div>
+                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-secondary font-bold text-sm">
+                  #
+                </div>
                 <input
                   type="text"
                   name="referralCode"
@@ -223,7 +271,10 @@ export default function Register() {
           <div className="mt-6 text-center">
             <p className="text-secondary text-sm">
               Already have an account?{" "}
-              <Link to="/login" className="text-primary font-bold hover:underline">
+              <Link
+                to="/login"
+                className="text-primary font-bold hover:underline"
+              >
                 Sign In
               </Link>
             </p>
@@ -231,5 +282,5 @@ export default function Register() {
         </div>
       </div>
     </div>
-  )
+  );
 }

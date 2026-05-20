@@ -17,7 +17,7 @@ export function getEmbedUrl(url) {
 
     // --- YouTube ---
     const ytMatch = url.match(
-      /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/
+      /(?:youtube\.com\/(?:watch\?v=|embed\/|v\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/,
     );
     if (ytMatch) {
       return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&modestbranding=1&rel=0`;
@@ -26,18 +26,22 @@ export function getEmbedUrl(url) {
     // --- Direct MP4 or other video files ---
     const extensionMatch = pathname.match(/\.(mp4|webm|ogg)$/i);
     if (extensionMatch) {
-      return url; 
+      return url;
     }
 
     // --- Already an embed URL ---
-    if (url.includes('player.vimeo.com') || url.includes('youtube.com/embed')) {
+    if (url.includes("player.vimeo.com") || url.includes("youtube.com/embed")) {
       return url;
     }
   } catch (e) {
     // Fallback for invalid URLs or relative paths
-    if (url.includes('vimeo.com') || url.includes('youtube.com') || url.includes('youtu.be')) {
+    if (
+      url.includes("vimeo.com") ||
+      url.includes("youtube.com") ||
+      url.includes("youtu.be")
+    ) {
       // Re-run simple regex if URL constructor fails
-    } else if (url.split('?')[0].match(/\.(mp4|webm|ogg)$/i)) {
+    } else if (url.split("?")[0].match(/\.(mp4|webm|ogg)$/i)) {
       return url;
     }
   }
@@ -51,18 +55,18 @@ export function getEmbedUrl(url) {
  */
 export function getVideoType(url) {
   if (!url) return null;
-  
+
   try {
     const urlObj = new URL(url, window.location.origin);
     const pathname = urlObj.pathname;
     if (pathname.match(/\.(mp4|webm|ogg)$/i)) {
-      return 'mp4';
+      return "mp4";
     }
   } catch (e) {
-    if (url.split('?')[0].match(/\.(mp4|webm|ogg)$/i)) {
-      return 'mp4';
+    if (url.split("?")[0].match(/\.(mp4|webm|ogg)$/i)) {
+      return "mp4";
     }
   }
-  
-  return 'iframe';
+
+  return "iframe";
 }

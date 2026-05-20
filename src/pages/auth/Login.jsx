@@ -1,36 +1,38 @@
 // src/pages/auth/Login.jsx
-import * as React from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { Mail, Lock, ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react"
-import { StorageService } from "../../services/storage"
+import * as React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Mail, Lock, ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
+import { StorageService } from "../../services/storage";
 
 export default function Login() {
-  const navigate = useNavigate()
-  const [email, setEmail] = React.useState("")
-  const [password, setPassword] = React.useState("")
-  const [loading, setLoading] = React.useState(false)
-  const [error, setError] = React.useState("")
-  const [showPassword, setShowPassword] = React.useState(false)
+  const navigate = useNavigate();
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
+    e.preventDefault();
+    setLoading(true);
+    setError("");
 
     try {
-      const result = await StorageService.login(email, password)
+      const result = await StorageService.login(email, password);
 
       if (result.success) {
-        navigate("/dashboard")
+        navigate("/dashboard");
       } else {
-        setError(result.message || "Login failed. Please check your credentials.")
+        setError(
+          result.message || "Login failed. Please check your credentials.",
+        );
       }
     } catch (err) {
-      setError("Network error. Please try again.")
+      setError("Network error. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-surface flex items-center justify-center px-4 py-12">
@@ -38,10 +40,16 @@ export default function Login() {
         {/* Logo/Brand */}
         <div className="text-center mb-8">
           <div className="w-16 h-16 signature-gradient rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-            <span className="text-white font-headline font-bold text-2xl">A</span>
+            <span className="text-white font-headline font-bold text-2xl">
+              A
+            </span>
           </div>
-          <h1 className="text-3xl font-headline font-bold text-primary mb-2">Welcome Back</h1>
-          <p className="text-secondary">Sign in to continue your learning journey</p>
+          <h1 className="text-3xl font-headline font-bold text-primary mb-2">
+            Welcome Back
+          </h1>
+          <p className="text-secondary">
+            Sign in to continue your learning journey
+          </p>
         </div>
 
         {/* Login Form */}
@@ -82,17 +90,27 @@ export default function Login() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setShowPassword((prev) => !prev);
+                  }}
                   className="absolute right-4 top-1/2 transform -translate-y-1/2 text-secondary hover:text-primary transition"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
 
             {/* Forgot Password Link */}
             <div className="flex justify-end">
-              <Link to="/forgot-password" className="text-xs text-primary hover:underline">
+              <Link
+                to="/forgot-password"
+                className="text-xs text-primary hover:underline"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -128,15 +146,16 @@ export default function Login() {
           <div className="mt-6 text-center">
             <p className="text-secondary text-sm">
               Don't have an account?{" "}
-              <Link to="/register" className="text-primary font-bold hover:underline">
+              <Link
+                to="/register"
+                className="text-primary font-bold hover:underline"
+              >
                 Create Account
               </Link>
             </p>
           </div>
-
-
         </div>
       </div>
     </div>
-  )
+  );
 }

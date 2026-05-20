@@ -1,313 +1,326 @@
 /* ─────────────────────────────────────────────────────────────────────────────
    Material 3 Expressive – Full Token System (Google I/O 2025-2026 edition)
-   Seed color: #005ac1 (Adhoc brand blue)
+   Seed color: #005ac1 (STAR LMS brand blue)
    Generated using M3 HCT algorithm via Material Theme Builder
    ────────────────────────────────────────────────────────────────────────── */
 
 /* Google Fonts: Google Sans (brand) + Roboto Flex (M3 Expressive variable font) */
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto+Flex:opsz,wght@8..144,100..900&family=Google+Sans+Display:wght@400;500;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto+Flex:opsz,wght@8..144,100..900&family=Google+Sans+Display:wght@400;500;700&display=swap");
 @import "tailwindcss";
+
+/* 🌙 Configure Tailwind v4 to use class-based dark mode instead of system preference */
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* ─── LIGHT MODE – Full M3 Expressive Role Set ──────────────────────────── */
 :root {
   /* ── Primary ── */
-  --primary:               #005ac1;
-  --on-primary:            #ffffff;
-  --primary-container:     #d8e2ff;
-  --on-primary-container:  #001a41;
-  --primary-fixed:         #d8e2ff;
-  --primary-fixed-dim:     #adc6ff;
-  --on-primary-fixed:      #001a41;
+  --primary: #0055ff;
+  --on-primary: #ffffff;
+  --primary-container: #d8e6ff;
+  --on-primary-container: #001a41;
+  --primary-fixed: #d8e2ff;
+  --primary-fixed-dim: #adc6ff;
+  --on-primary-fixed: #001a41;
   --on-primary-fixed-variant: #004494;
 
   /* ── Secondary ── */
-  --secondary:             #575e71;
-  --on-secondary:          #ffffff;
-  --secondary-container:   #dbe2f9;
-  --on-secondary-container:#141b2c;
-  --secondary-fixed:       #dbe2f9;
-  --secondary-fixed-dim:   #bfc6dc;
-  --on-secondary-fixed:    #141b2c;
+  --secondary: #575e71;
+  --on-secondary: #ffffff;
+  --secondary-container: #dbe2f9;
+  --on-secondary-container: #141b2c;
+  --secondary-fixed: #dbe2f9;
+  --secondary-fixed-dim: #bfc6dc;
+  --on-secondary-fixed: #141b2c;
   --on-secondary-fixed-variant: #3f4759;
 
-  /* ── Tertiary (Expressive Accent – vibrant pink-violet) ── */
-  --tertiary:              #715573;
-  --on-tertiary:           #ffffff;
-  --tertiary-container:    #fbd7fc;
+  /* ── Tertiary (Expressive Accent – vibrant neon fuchsia) ── */
+  --tertiary: #d946ef;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #fae8ff;
   --on-tertiary-container: #29132d;
-  --tertiary-fixed:        #fbd7fc;
-  --tertiary-fixed-dim:    #ddb8df;
-  --on-tertiary-fixed:     #29132d;
+  --tertiary-fixed: #fbd7fc;
+  --tertiary-fixed-dim: #ddb8df;
+  --on-tertiary-fixed: #29132d;
   --on-tertiary-fixed-variant: #583e5a;
 
   /* ── Surface Hierarchy (M3 Expressive full tonal stack) ── */
-  --surface:                      #fdfbff;
-  --on-surface:                   #1b1b1f;
-  --surface-variant:              #e1e2ec;
-  --on-surface-variant:           #44474f;
-  --surface-dim:                  #dbd9de;
-  --surface-bright:               #fdfbff;
-  --surface-container-lowest:     #ffffff;
-  --surface-container-low:        #f7f2fa;
-  --surface-container:            #f1ecf4;
-  --surface-container-high:       #ece6ef;
-  --surface-container-highest:    #e6e0e9;
+  --surface: #fdfbff;
+  --on-surface: #1b1b1f;
+  --surface-variant: #e1e2ec;
+  --on-surface-variant: #44474f;
+  --surface-dim: #dbd9de;
+  --surface-bright: #fdfbff;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f7f2fa;
+  --surface-container: #f1ecf4;
+  --surface-container-high: #ece6ef;
+  --surface-container-highest: #e6e0e9;
 
   /* ── Inverse ── */
-  --inverse-surface:       #303034;
-  --inverse-on-surface:    #f2eff4;
-  --inverse-primary:       #adc6ff;
+  --inverse-surface: #303034;
+  --inverse-on-surface: #f2eff4;
+  --inverse-primary: #adc6ff;
 
   /* ── Outline ── */
-  --outline:               #74777f;
-  --outline-variant:       #c4c6d0;
+  --outline: #74777f;
+  --outline-variant: #c4c6d0;
 
   /* ── Background ── */
-  --background:            #fdfbff;
-  --foreground:            #1b1b1f;
-  --on-background:         #1b1b1f;
+  --background: #fdfbff;
+  --foreground: #1b1b1f;
+  --on-background: #1b1b1f;
 
   /* ── Scrim & Shadow ── */
-  --scrim:                 #000000;
-  --shadow:                #000000;
+  --scrim: #000000;
+  --shadow: #000000;
 
   /* ── Status Colors ── */
-  --error:                 #ba1a1a;
-  --on-error:              #ffffff;
-  --error-container:       #ffdad6;
-  --on-error-container:    #410002;
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #410002;
 
-  --success:               #1a6c31;
-  --on-success:            #ffffff;
-  --success-container:     #a6f5ab;
-  --on-success-container:  #002107;
+  --success: #1a6c31;
+  --on-success: #ffffff;
+  --success-container: #a6f5ab;
+  --on-success-container: #002107;
 
-  --warning:               #7a5900;
-  --on-warning:            #ffffff;
-  --warning-container:     #ffdf9d;
-  --on-warning-container:  #261900;
+  --warning: #7a5900;
+  --on-warning: #ffffff;
+  --warning-container: #ffdf9d;
+  --on-warning-container: #261900;
 
   /* ── Shape Tokens (M3 Expressive shape scale) ── */
-  --shape-none:           0px;
-  --shape-extra-small:    4px;
-  --shape-small:          8px;
-  --shape-medium:         12px;
-  --shape-large:          16px;
-  --shape-extra-large:    28px;
-  --shape-full:           9999px;
+  --shape-none: 0px;
+  --shape-extra-small: 4px;
+  --shape-small: 8px;
+  --shape-medium: 12px;
+  --shape-large: 16px;
+  --shape-extra-large: 28px;
+  --shape-full: 9999px;
 
   /* Legacy radius aliases (backward compat) */
-  --radius-lg:   var(--shape-large);
-  --radius-xl:   1.5rem;
-  --radius-2xl:  2rem;
-  --radius-3xl:  2.5rem;
+  --radius-lg: var(--shape-large);
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-3xl: 2.5rem;
   --radius-full: var(--shape-full);
 
   /* ── Motion Tokens (M3 Expressive spring physics) ── */
-  --motion-easing-standard:         cubic-bezier(0.2, 0, 0, 1);
-  --motion-easing-standard-accel:   cubic-bezier(0.3, 0, 1, 1);
-  --motion-easing-standard-decel:   cubic-bezier(0, 0, 0, 1);
-  --motion-easing-emphasized:       cubic-bezier(0.2, 0, 0, 1);
+  --motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --motion-easing-standard-accel: cubic-bezier(0.3, 0, 1, 1);
+  --motion-easing-standard-decel: cubic-bezier(0, 0, 0, 1);
+  --motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
   --motion-easing-emphasized-accel: cubic-bezier(0.3, 0, 0.8, 0.15);
   --motion-easing-emphasized-decel: cubic-bezier(0.05, 0.7, 0.1, 1);
-  --motion-duration-short1:  50ms;
-  --motion-duration-short2:  100ms;
-  --motion-duration-short3:  150ms;
-  --motion-duration-short4:  200ms;
+  --motion-duration-short1: 50ms;
+  --motion-duration-short2: 100ms;
+  --motion-duration-short3: 150ms;
+  --motion-duration-short4: 200ms;
   --motion-duration-medium1: 250ms;
   --motion-duration-medium2: 300ms;
   --motion-duration-medium3: 350ms;
   --motion-duration-medium4: 400ms;
-  --motion-duration-long1:   450ms;
-  --motion-duration-long2:   500ms;
-  --motion-duration-long3:   550ms;
-  --motion-duration-long4:   600ms;
+  --motion-duration-long1: 450ms;
+  --motion-duration-long2: 500ms;
+  --motion-duration-long3: 550ms;
+  --motion-duration-long4: 600ms;
 
   /* ── Typography Tokens (Roboto Flex variable axes) ── */
-  --font-google:       'Google Sans', 'Roboto Flex', system-ui, sans-serif;
-  --font-display:      'Google Sans Display', 'Google Sans', sans-serif;
-  --font-body:         'Roboto Flex', 'Google Sans', system-ui, sans-serif;
-  --font-headline:     'Google Sans', 'Google Sans Display', sans-serif;
-  --font-mono:         'Roboto Mono', 'Courier New', monospace;
+  --font-google: "Google Sans", "Roboto Flex", system-ui, sans-serif;
+  --font-display: "Google Sans Display", "Google Sans", sans-serif;
+  --font-body: "Roboto Flex", "Google Sans", system-ui, sans-serif;
+  --font-headline: "Google Sans", "Google Sans Display", sans-serif;
+  --font-mono: "Roboto Mono", "Courier New", monospace;
 
   /* ── Elevation (M3 surface tint approach) ── */
-  --elevation-0: 0px 0px 0px 0px rgba(0,0,0,0);
-  --elevation-1: 0px 1px 2px 0px rgba(0,0,0,0.3), 0px 1px 3px 1px rgba(0,0,0,0.15);
-  --elevation-2: 0px 1px 2px 0px rgba(0,0,0,0.3), 0px 2px 6px 2px rgba(0,0,0,0.15);
-  --elevation-3: 0px 1px 3px 0px rgba(0,0,0,0.3), 0px 4px 8px 3px rgba(0,0,0,0.15);
-  --elevation-4: 0px 2px 3px 0px rgba(0,0,0,0.3), 0px 6px 10px 4px rgba(0,0,0,0.15);
-  --elevation-5: 0px 4px 4px 0px rgba(0,0,0,0.3), 0px 8px 12px 6px rgba(0,0,0,0.15);
+  --elevation-0: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+  --elevation-1:
+    0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  --elevation-2:
+    0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+  --elevation-3:
+    0px 1px 3px 0px rgba(0, 0, 0, 0.3), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);
+  --elevation-4:
+    0px 2px 3px 0px rgba(0, 0, 0, 0.3), 0px 6px 10px 4px rgba(0, 0, 0, 0.15);
+  --elevation-5:
+    0px 4px 4px 0px rgba(0, 0, 0, 0.3), 0px 8px 12px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* ─── DARK MODE – Full M3 Expressive Role Set (High Vibrancy) ───────────── */
 .dark {
-  /* ── Primary – brighter & more vivid in dark ── */
-  --primary:               #c5d8ff;
-  --on-primary:            #001e4a;
-  --primary-container:     #0052a3;
-  --on-primary-container:  #dce8ff;
-  --primary-fixed:         #d8e2ff;
-  --primary-fixed-dim:     #adc6ff;
-  --on-primary-fixed:      #001a41;
+  /* ── Primary – brighter & more vivid luminous cyan-blue in dark ── */
+  --primary: #38bdf8;
+  --on-primary: #03294f;
+  --primary-container: #0284c7;
+  --on-primary-container: #e0f2fe;
+  --primary-fixed: #d8e2ff;
+  --primary-fixed-dim: #adc6ff;
+  --on-primary-fixed: #001a41;
   --on-primary-fixed-variant: #004494;
 
   /* ── Secondary – warmer tone in dark ── */
-  --secondary:             #cdd4ec;
-  --on-secondary:          #1e2738;
-  --secondary-container:   #485468;
-  --on-secondary-container:#e8eeff;
-  --secondary-fixed:       #dbe2f9;
-  --secondary-fixed-dim:   #bfc6dc;
-  --on-secondary-fixed:    #141b2c;
+  --secondary: #cdd4ec;
+  --on-secondary: #1e2738;
+  --secondary-container: #485468;
+  --on-secondary-container: #e8eeff;
+  --secondary-fixed: #dbe2f9;
+  --secondary-fixed-dim: #bfc6dc;
+  --on-secondary-fixed: #141b2c;
   --on-secondary-fixed-variant: #3f4759;
 
   /* ── Tertiary – vivid pink-violet expressive accent ── */
-  --tertiary:              #edc5f0;
-  --on-tertiary:           #36163a;
-  --tertiary-container:    #6a4a6d;
-  --on-tertiary-container: #fce8ff;
-  --tertiary-fixed:        #fbd7fc;
-  --tertiary-fixed-dim:    #ddb8df;
-  --on-tertiary-fixed:     #29132d;
+  --tertiary: #f472b6;
+  --on-tertiary: #3b0726;
+  --tertiary-container: #9d174d;
+  --on-tertiary-container: #fce7f3;
+  --tertiary-fixed: #fbd7fc;
+  --tertiary-fixed-dim: #ddb8df;
+  --on-tertiary-fixed: #29132d;
   --on-tertiary-fixed-variant: #583e5a;
 
   /* ── Surface Hierarchy – deeper, richer dark tones ── */
-  --surface:                      #111115;
-  --on-surface:                   #eae9ee;
-  --surface-variant:              #3a3d47;
-  --on-surface-variant:           #d0d2de;
-  --surface-dim:                  #111115;
-  --surface-bright:               #36333c;
-  --surface-container-lowest:     #0a0a0e;
-  --surface-container-low:        #1a1820;
-  --surface-container:            #1f1d26;
-  --surface-container-high:       #2a2733;
-  --surface-container-highest:    #34313f;
+  --surface: #111115;
+  --on-surface: #eae9ee;
+  --surface-variant: #3a3d47;
+  --on-surface-variant: #d0d2de;
+  --surface-dim: #111115;
+  --surface-bright: #36333c;
+  --surface-container-lowest: #0a0a0e;
+  --surface-container-low: #1a1820;
+  --surface-container: #1f1d26;
+  --surface-container-high: #2a2733;
+  --surface-container-highest: #34313f;
 
   /* ── Inverse ── */
-  --inverse-surface:       #e5e3e8;
-  --inverse-on-surface:    #2e2c32;
-  --inverse-primary:       #005ac1;
+  --inverse-surface: #e5e3e8;
+  --inverse-on-surface: #2e2c32;
+  --inverse-primary: #005ac1;
 
   /* ── Outline – more visible in dark ── */
-  --outline:               #9a9da8;
-  --outline-variant:       #3a3d47;
+  --outline: #9a9da8;
+  --outline-variant: #3a3d47;
 
   /* ── Background ── */
-  --background:            #111115;
-  --foreground:            #eae9ee;
-  --on-background:         #eae9ee;
+  --background: #111115;
+  --foreground: #eae9ee;
+  --on-background: #eae9ee;
 
   /* ── Scrim ── */
-  --scrim:                 #000000;
-  --shadow:                #000000;
+  --scrim: #000000;
+  --shadow: #000000;
 
   /* ── Status Colors ── */
-  --error:                 #ffb4ab;
-  --on-error:              #690005;
-  --error-container:       #93000a;
-  --on-error-container:    #ffdad6;
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
 
-  --success:               #9eeaa5;
-  --on-success:            #00390f;
-  --success-container:     #006020;
-  --on-success-container:  #b8f5be;
+  --success: #9eeaa5;
+  --on-success: #00390f;
+  --success-container: #006020;
+  --on-success-container: #b8f5be;
 
-  --warning:               #ffca28;
-  --on-warning:            #3c2000;
-  --warning-container:     #6e4400;
-  --on-warning-container:  #ffe0b2;
+  --warning: #ffca28;
+  --on-warning: #3c2000;
+  --warning-container: #6e4400;
+  --on-warning-container: #ffe0b2;
 
   /* ── Elevation – stronger in dark for contrast ── */
-  --elevation-0: 0px 0px 0px 0px rgba(0,0,0,0);
-  --elevation-1: 0px 1px 3px 0px rgba(0,0,0,0.5), 0px 1px 4px 1px rgba(0,0,0,0.3);
-  --elevation-2: 0px 2px 4px 0px rgba(0,0,0,0.5), 0px 3px 8px 2px rgba(0,0,0,0.3);
-  --elevation-3: 0px 2px 6px 0px rgba(0,0,0,0.5), 0px 6px 12px 4px rgba(0,0,0,0.3);
-  --elevation-4: 0px 3px 6px 0px rgba(0,0,0,0.5), 0px 8px 14px 5px rgba(0,0,0,0.3);
-  --elevation-5: 0px 5px 8px 0px rgba(0,0,0,0.5), 0px 10px 16px 7px rgba(0,0,0,0.3);
+  --elevation-0: 0px 0px 0px 0px rgba(0, 0, 0, 0);
+  --elevation-1:
+    0px 1px 3px 0px rgba(0, 0, 0, 0.5), 0px 1px 4px 1px rgba(0, 0, 0, 0.3);
+  --elevation-2:
+    0px 2px 4px 0px rgba(0, 0, 0, 0.5), 0px 3px 8px 2px rgba(0, 0, 0, 0.3);
+  --elevation-3:
+    0px 2px 6px 0px rgba(0, 0, 0, 0.5), 0px 6px 12px 4px rgba(0, 0, 0, 0.3);
+  --elevation-4:
+    0px 3px 6px 0px rgba(0, 0, 0, 0.5), 0px 8px 14px 5px rgba(0, 0, 0, 0.3);
+  --elevation-5:
+    0px 5px 8px 0px rgba(0, 0, 0, 0.5), 0px 10px 16px 7px rgba(0, 0, 0, 0.3);
 }
 
 /* ─── Tailwind v4 @theme mapping ─────────────────────────────────────────── */
 @theme {
   /* Fonts */
-  --font-headline:    var(--font-headline);
-  --font-body:        var(--font-body);
-  --font-display:     var(--font-display);
-  --font-mono:        var(--font-mono);
+  --font-headline: var(--font-headline);
+  --font-body: var(--font-body);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
 
   /* Primary */
-  --color-primary:                var(--primary);
-  --color-on-primary:             var(--on-primary);
-  --color-primary-container:      var(--primary-container);
-  --color-on-primary-container:   var(--on-primary-container);
-  --color-primary-fixed:          var(--primary-fixed);
-  --color-primary-fixed-dim:      var(--primary-fixed-dim);
-  --color-on-primary-fixed:       var(--on-primary-fixed);
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-primary-fixed: var(--primary-fixed);
+  --color-primary-fixed-dim: var(--primary-fixed-dim);
+  --color-on-primary-fixed: var(--on-primary-fixed);
   --color-on-primary-fixed-variant: var(--on-primary-fixed-variant);
 
   /* Secondary */
-  --color-secondary:              var(--secondary);
-  --color-on-secondary:           var(--on-secondary);
-  --color-secondary-container:    var(--secondary-container);
+  --color-secondary: var(--secondary);
+  --color-on-secondary: var(--on-secondary);
+  --color-secondary-container: var(--secondary-container);
   --color-on-secondary-container: var(--on-secondary-container);
-  --color-secondary-fixed:        var(--secondary-fixed);
-  --color-secondary-fixed-dim:    var(--secondary-fixed-dim);
-  --color-on-secondary-fixed:     var(--on-secondary-fixed);
+  --color-secondary-fixed: var(--secondary-fixed);
+  --color-secondary-fixed-dim: var(--secondary-fixed-dim);
+  --color-on-secondary-fixed: var(--on-secondary-fixed);
   --color-on-secondary-fixed-variant: var(--on-secondary-fixed-variant);
 
   /* Tertiary */
-  --color-tertiary:               var(--tertiary);
-  --color-on-tertiary:            var(--on-tertiary);
-  --color-tertiary-container:     var(--tertiary-container);
-  --color-on-tertiary-container:  var(--on-tertiary-container);
-  --color-tertiary-fixed:         var(--tertiary-fixed);
-  --color-tertiary-fixed-dim:     var(--tertiary-fixed-dim);
-  --color-on-tertiary-fixed:      var(--on-tertiary-fixed);
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+  --color-tertiary-fixed: var(--tertiary-fixed);
+  --color-tertiary-fixed-dim: var(--tertiary-fixed-dim);
+  --color-on-tertiary-fixed: var(--on-tertiary-fixed);
   --color-on-tertiary-fixed-variant: var(--on-tertiary-fixed-variant);
 
   /* Surface Hierarchy */
-  --color-surface:                   var(--surface);
-  --color-on-surface:                var(--on-surface);
-  --color-surface-variant:           var(--surface-variant);
-  --color-on-surface-variant:        var(--on-surface-variant);
-  --color-surface-dim:               var(--surface-dim);
-  --color-surface-bright:            var(--surface-bright);
-  --color-surface-container-lowest:  var(--surface-container-lowest);
-  --color-surface-container-low:     var(--surface-container-low);
-  --color-surface-container:         var(--surface-container);
-  --color-surface-container-high:    var(--surface-container-high);
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
+  --color-surface-variant: var(--surface-variant);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-bright: var(--surface-bright);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
   --color-surface-container-highest: var(--surface-container-highest);
 
   /* Inverse */
-  --color-inverse-surface:        var(--inverse-surface);
-  --color-inverse-on-surface:     var(--inverse-on-surface);
-  --color-inverse-primary:        var(--inverse-primary);
+  --color-inverse-surface: var(--inverse-surface);
+  --color-inverse-on-surface: var(--inverse-on-surface);
+  --color-inverse-primary: var(--inverse-primary);
 
   /* Background */
-  --color-background:             var(--background);
-  --color-foreground:             var(--foreground);
-  --color-on-background:          var(--on-background);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-on-background: var(--on-background);
 
   /* Outline */
-  --color-outline:                var(--outline);
-  --color-outline-variant:        var(--outline-variant);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
 
   /* Scrim */
-  --color-scrim:                  var(--scrim);
+  --color-scrim: var(--scrim);
 
   /* Status */
-  --color-error:                  var(--error);
-  --color-on-error:               var(--on-error);
-  --color-error-container:        var(--error-container);
-  --color-on-error-container:     var(--on-error-container);
-  --color-success:                var(--success);
-  --color-on-success:             var(--on-success);
-  --color-success-container:      var(--success-container);
-  --color-on-success-container:   var(--on-success-container);
-  --color-warning:                var(--warning);
-  --color-on-warning:             var(--on-warning);
-  --color-warning-container:      var(--warning-container);
-  --color-on-warning-container:   var(--on-warning-container);
+  --color-error: var(--error);
+  --color-on-error: var(--on-error);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+  --color-success: var(--success);
+  --color-on-success: var(--on-success);
+  --color-success-container: var(--success-container);
+  --color-on-success-container: var(--on-success-container);
+  --color-warning: var(--warning);
+  --color-on-warning: var(--on-warning);
+  --color-warning-container: var(--warning-container);
+  --color-on-warning-container: var(--on-warning-container);
 }
 
 /* ─── Base Layer ─────────────────────────────────────────────────────────── */
@@ -322,11 +335,18 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
-    font-variation-settings: 'wght' 400, 'opsz' 14;
+    font-variation-settings:
+      "wght" 400,
+      "opsz" 14;
   }
 
   /* Headline / display uses Google Sans */
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-headline);
     letter-spacing: -0.01em;
   }
@@ -341,13 +361,13 @@
 
 /* ─── Utilities Layer ────────────────────────────────────────────────────── */
 @layer utilities {
-
   /* ── M3 Card Variants ── */
   .m3-card-filled {
     background-color: var(--surface-container-highest);
     border-radius: var(--shape-extra-large);
     padding: 1.5rem;
-    transition: box-shadow var(--motion-duration-medium2) var(--motion-easing-standard);
+    transition: box-shadow var(--motion-duration-medium2)
+      var(--motion-easing-standard);
   }
   .m3-card-filled:hover {
     box-shadow: var(--elevation-2);
@@ -358,7 +378,8 @@
     border-radius: var(--shape-extra-large);
     box-shadow: var(--elevation-1);
     padding: 1.5rem;
-    transition: box-shadow var(--motion-duration-medium2) var(--motion-easing-standard);
+    transition: box-shadow var(--motion-duration-medium2)
+      var(--motion-easing-standard);
   }
   .m3-card-elevated:hover {
     box-shadow: var(--elevation-2);
@@ -369,8 +390,9 @@
     border: 1px solid var(--outline-variant);
     border-radius: var(--shape-extra-large);
     padding: 1.5rem;
-    transition: border-color var(--motion-duration-short4) var(--motion-easing-standard),
-                box-shadow var(--motion-duration-medium2) var(--motion-easing-standard);
+    transition:
+      border-color var(--motion-duration-short4) var(--motion-easing-standard),
+      box-shadow var(--motion-duration-medium2) var(--motion-easing-standard);
   }
   .m3-card-outlined:hover {
     box-shadow: var(--elevation-1);
@@ -383,8 +405,9 @@
     border: 1px solid var(--outline-variant);
     border-radius: var(--shape-extra-large);
     padding: 1.5rem;
-    transition: border-color var(--motion-duration-short4) var(--motion-easing-standard),
-                box-shadow var(--motion-duration-medium2) var(--motion-easing-standard);
+    transition:
+      border-color var(--motion-duration-short4) var(--motion-easing-standard),
+      box-shadow var(--motion-duration-medium2) var(--motion-easing-standard);
   }
   .material-card:hover {
     box-shadow: var(--elevation-1);
@@ -398,8 +421,9 @@
     font-weight: 500;
     font-size: 0.875rem;
     letter-spacing: 0.00625rem;
-    transition: box-shadow var(--motion-duration-short4) var(--motion-easing-standard),
-                transform var(--motion-duration-short3) var(--motion-easing-emphasized);
+    transition:
+      box-shadow var(--motion-duration-short4) var(--motion-easing-standard),
+      transform var(--motion-duration-short3) var(--motion-easing-emphasized);
   }
   .m3-pill:active {
     transform: scale(0.97);
@@ -407,29 +431,42 @@
 
   /* ── Signature Gradient (theme-aware, works in light & dark) ── */
   .signature-gradient {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
+    background: linear-gradient(
+      135deg,
+      var(--primary) 0%,
+      #818cf8 50%,
+      var(--tertiary) 100%
+    );
   }
   .signature-gradient-expressive {
     background: linear-gradient(
       135deg,
       var(--primary) 0%,
-      color-mix(in srgb, var(--primary) 70%, var(--tertiary)) 50%,
+      #6366f1 50%,
       var(--tertiary) 100%
     );
   }
-  /* CTA banner: always rich blue-violet regardless of mode */
+  /* CTA banner: always rich cosmic gradient regardless of mode */
   .signature-gradient-cta {
-    background: linear-gradient(135deg, #005ac1 0%, #715573 100%);
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #db2777 100%);
   }
 
-  /* ── Ambient shadow (used in hero/cards) ── */
+  /* ── Ambient shadow & Cosmic Glow (used in hero/cards) ── */
   .ambient-shadow {
-    box-shadow: 0 8px 32px -8px color-mix(in srgb, var(--primary) 30%, transparent),
-                0 2px 8px -2px rgba(0, 0, 0, 0.12);
+    box-shadow:
+      0 8px 32px -8px color-mix(in srgb, var(--primary) 40%, transparent),
+      0 2px 8px -2px rgba(0, 0, 0, 0.2);
   }
   .ambient-shadow-lg {
-    box-shadow: 0 16px 48px -12px color-mix(in srgb, var(--primary) 35%, transparent),
-                0 4px 16px -4px rgba(0, 0, 0, 0.18);
+    box-shadow:
+      0 16px 48px -12px color-mix(in srgb, var(--primary) 50%, transparent),
+      0 4px 16px -4px rgba(0, 0, 0, 0.3);
+  }
+  .star-glow {
+    box-shadow: 0 0 25px 2px color-mix(in srgb, var(--primary) 60%, transparent);
+  }
+  .cosmic-border {
+    border: 1px solid color-mix(in srgb, var(--primary) 50%, transparent);
   }
 
   /* ── M3 Expressive Spring Transition Utilities ── */
@@ -452,30 +489,49 @@
     overflow: hidden;
   }
   .state-layer-primary::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background-color: var(--primary);
     opacity: 0;
     border-radius: inherit;
-    transition: opacity var(--motion-duration-short4) var(--motion-easing-standard);
+    transition: opacity var(--motion-duration-short4)
+      var(--motion-easing-standard);
     pointer-events: none;
   }
-  .state-layer-primary:hover::after { opacity: 0.08; }
-  .state-layer-primary:focus-visible::after { opacity: 0.12; }
-  .state-layer-primary:active::after { opacity: 0.16; }
+  .state-layer-primary:hover::after {
+    opacity: 0.08;
+  }
+  .state-layer-primary:focus-visible::after {
+    opacity: 0.12;
+  }
+  .state-layer-primary:active::after {
+    opacity: 0.16;
+  }
 
   /* ── M3 Expressive Surface Tint (elevation via color) ── */
-  .surface-tint-1 { background-color: color-mix(in srgb, var(--primary) 5%, var(--surface)); }
-  .surface-tint-2 { background-color: color-mix(in srgb, var(--primary) 8%, var(--surface)); }
-  .surface-tint-3 { background-color: color-mix(in srgb, var(--primary) 11%, var(--surface)); }
-  .surface-tint-4 { background-color: color-mix(in srgb, var(--primary) 12%, var(--surface)); }
-  .surface-tint-5 { background-color: color-mix(in srgb, var(--primary) 14%, var(--surface)); }
+  .surface-tint-1 {
+    background-color: color-mix(in srgb, var(--primary) 5%, var(--surface));
+  }
+  .surface-tint-2 {
+    background-color: color-mix(in srgb, var(--primary) 8%, var(--surface));
+  }
+  .surface-tint-3 {
+    background-color: color-mix(in srgb, var(--primary) 11%, var(--surface));
+  }
+  .surface-tint-4 {
+    background-color: color-mix(in srgb, var(--primary) 12%, var(--surface));
+  }
+  .surface-tint-5 {
+    background-color: color-mix(in srgb, var(--primary) 14%, var(--surface));
+  }
 
   /* ── M3 Shape Morphing utility (for expressive FAB / button expand) ── */
   .shape-morph {
-    transition: border-radius var(--motion-duration-medium4) var(--motion-easing-emphasized),
-                transform var(--motion-duration-medium2) var(--motion-easing-emphasized);
+    transition:
+      border-radius var(--motion-duration-medium4)
+        var(--motion-easing-emphasized),
+      transform var(--motion-duration-medium2) var(--motion-easing-emphasized);
   }
   .shape-morph:hover {
     border-radius: var(--shape-large);
@@ -484,18 +540,45 @@
 
   /* ── Glassmorphism (used in nav/cards) ── */
   .glass-surface {
-    background-color: color-mix(in srgb, var(--surface-container) 72%, transparent);
+    background-color: color-mix(
+      in srgb,
+      var(--surface-container) 72%,
+      transparent
+    );
     backdrop-filter: blur(16px) saturate(200%);
     -webkit-backdrop-filter: blur(16px) saturate(200%);
-    border: 1px solid color-mix(in srgb, var(--outline-variant) 40%, transparent);
+    border: 1px solid
+      color-mix(in srgb, var(--outline-variant) 40%, transparent);
   }
 
   /* ── Section spacing helpers (consistent rhythm) ── */
-  .section-padding    { padding-top: 5rem;  padding-bottom: 5rem; }
-  .section-padding-sm { padding-top: 3rem;  padding-bottom: 3rem; }
-  .section-inner      { max-width: 80rem; margin-left: auto; margin-right: auto; padding-left: 1.5rem; padding-right: 1.5rem; }
-  @media (min-width: 640px)  { .section-inner { padding-left: 2.5rem; padding-right: 2.5rem; } }
-  @media (min-width: 1024px) { .section-inner { padding-left: 3rem; padding-right: 3rem; } }
+  .section-padding {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+  }
+  .section-padding-sm {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  .section-inner {
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  @media (min-width: 640px) {
+    .section-inner {
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .section-inner {
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+  }
 
   /* ── Section label chip ── */
   .section-chip {
@@ -515,8 +598,9 @@
 
   /* ── Premium card hover lift ── */
   .card-lift {
-    transition: transform var(--motion-duration-medium2) var(--motion-easing-emphasized),
-                box-shadow var(--motion-duration-medium2) var(--motion-easing-standard);
+    transition:
+      transform var(--motion-duration-medium2) var(--motion-easing-emphasized),
+      box-shadow var(--motion-duration-medium2) var(--motion-easing-standard);
   }
   .card-lift:hover {
     transform: translateY(-4px) scale(1.01);
@@ -524,19 +608,280 @@
   }
 
   /* ── M3 Expressive Typography Scale utilities ── */
-  .display-large  { font-family: var(--font-display); font-size: 3.5625rem;  line-height: 4rem;     font-weight: 400; letter-spacing: -0.016em; }
-  .display-medium { font-family: var(--font-display); font-size: 2.8125rem;  line-height: 3.25rem;  font-weight: 400; letter-spacing: -0.008em; }
-  .display-small  { font-family: var(--font-display); font-size: 2.25rem;    line-height: 2.75rem;  font-weight: 400; }
-  .headline-large  { font-family: var(--font-headline); font-size: 2rem;     line-height: 2.5rem;   font-weight: 400; }
-  .headline-medium { font-family: var(--font-headline); font-size: 1.75rem;  line-height: 2.25rem;  font-weight: 400; }
-  .headline-small  { font-family: var(--font-headline); font-size: 1.5rem;   line-height: 2rem;     font-weight: 400; }
-  .title-large  { font-family: var(--font-headline); font-size: 1.375rem; line-height: 1.75rem; font-weight: 400; }
-  .title-medium { font-family: var(--font-body);    font-size: 1rem;     line-height: 1.5rem;  font-weight: 500; letter-spacing: 0.009em; }
-  .title-small  { font-family: var(--font-body);    font-size: 0.875rem; line-height: 1.25rem; font-weight: 500; letter-spacing: 0.006em; }
-  .label-large  { font-family: var(--font-body);    font-size: 0.875rem; line-height: 1.25rem; font-weight: 500; letter-spacing: 0.006em; }
-  .label-medium { font-family: var(--font-body);    font-size: 0.75rem;  line-height: 1rem;    font-weight: 500; letter-spacing: 0.031em; }
-  .label-small  { font-family: var(--font-body);    font-size: 0.6875rem;line-height: 1rem;    font-weight: 500; letter-spacing: 0.031em; }
-  .body-large   { font-family: var(--font-body);    font-size: 1rem;     line-height: 1.5rem;  font-weight: 400; letter-spacing: 0.031em; }
-  .body-medium  { font-family: var(--font-body);    font-size: 0.875rem; line-height: 1.25rem; font-weight: 400; letter-spacing: 0.016em; }
-  .body-small   { font-family: var(--font-body);    font-size: 0.75rem;  line-height: 1rem;    font-weight: 400; letter-spacing: 0.025em; }
+  .display-large {
+    font-family: var(--font-display);
+    font-size: 3.5625rem;
+    line-height: 4rem;
+    font-weight: 400;
+    letter-spacing: -0.016em;
+  }
+  .display-medium {
+    font-family: var(--font-display);
+    font-size: 2.8125rem;
+    line-height: 3.25rem;
+    font-weight: 400;
+    letter-spacing: -0.008em;
+  }
+  .display-small {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    line-height: 2.75rem;
+    font-weight: 400;
+  }
+  .headline-large {
+    font-family: var(--font-headline);
+    font-size: 2rem;
+    line-height: 2.5rem;
+    font-weight: 400;
+  }
+  .headline-medium {
+    font-family: var(--font-headline);
+    font-size: 1.75rem;
+    line-height: 2.25rem;
+    font-weight: 400;
+  }
+  .headline-small {
+    font-family: var(--font-headline);
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 400;
+  }
+  .title-large {
+    font-family: var(--font-headline);
+    font-size: 1.375rem;
+    line-height: 1.75rem;
+    font-weight: 400;
+  }
+  .title-medium {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+    letter-spacing: 0.009em;
+  }
+  .title-small {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.006em;
+  }
+  .label-large {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0.006em;
+  }
+  .label-medium {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.031em;
+  }
+  .label-small {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    line-height: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.031em;
+  }
+  .body-large {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.031em;
+  }
+  .body-medium {
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 400;
+    letter-spacing: 0.016em;
+  }
+  .body-small {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.025em;
+  }
+
+  /* ── Hi-Tech & Futuristic UI Utilities ── */
+  @keyframes cyberPulse {
+    0%,
+    100% {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.02);
+      filter: drop-shadow(0 0 15px var(--primary));
+    }
+  }
+  @keyframes cyberFloat {
+    0%,
+    100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-8px) rotate(0.5deg);
+    }
+  }
+  @keyframes scanline {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(1000%);
+    }
+  }
+  @keyframes cyberGridMove {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 40px 40px;
+    }
+  }
+
+  .cyber-grid-bg {
+    background-size: 40px 40px;
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--primary) 6%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--primary) 6%, transparent) 1px,
+        transparent 1px
+      );
+    animation: cyberGridMove 20s linear infinite;
+  }
+  .cyber-grid-dense {
+    background-size: 20px 20px;
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--primary) 4%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--primary) 4%, transparent) 1px,
+        transparent 1px
+      );
+  }
+
+  .cyber-glass {
+    background: color-mix(in srgb, var(--surface) 75%, transparent);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid
+      color-mix(
+        in srgb,
+        var(--primary) 20%,
+        color-mix(in srgb, var(--outline-variant) 30%, transparent)
+      );
+    box-shadow:
+      0 8px 32px 0 rgba(0, 85, 255, 0.08),
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+  }
+  .cyber-glass-glow {
+    background: color-mix(
+      in srgb,
+      var(--surface-container-low) 80%,
+      transparent
+    );
+    backdrop-filter: blur(28px) saturate(200%);
+    -webkit-backdrop-filter: blur(28px) saturate(200%);
+    border: 1px solid color-mix(in srgb, var(--primary) 35%, transparent);
+    box-shadow:
+      0 0 25px -5px color-mix(in srgb, var(--primary) 40%, transparent),
+      inset 0 1px 2px color-mix(in srgb, var(--on-primary) 20%, transparent);
+  }
+
+  .hi-tech-panel {
+    position: relative;
+    background: var(--surface-container-lowest);
+    border: 1px solid color-mix(in srgb, var(--primary) 25%, transparent);
+    border-radius: var(--shape-extra-large);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
+  }
+  .hi-tech-panel::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--primary),
+      var(--tertiary),
+      transparent
+    );
+    opacity: 0.7;
+    transition: opacity 0.4s;
+  }
+  .hi-tech-panel:hover {
+    transform: translateY(-4px) scale(1.01);
+    border-color: var(--primary);
+    box-shadow:
+      0 12px 40px -10px color-mix(in srgb, var(--primary) 30%, transparent),
+      0 0 20px 2px color-mix(in srgb, var(--tertiary) 20%, transparent);
+  }
+  .hi-tech-panel:hover::before {
+    opacity: 1;
+    filter: brightness(1.3);
+  }
+
+  .neon-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.35rem 1rem;
+    border-radius: var(--shape-full);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--primary) 15%, transparent),
+      color-mix(in srgb, var(--tertiary) 15%, transparent)
+    );
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid color-mix(in srgb, var(--primary) 40%, transparent);
+    box-shadow: 0 0 15px -2px
+      color-mix(in srgb, var(--primary) 30%, transparent);
+  }
+
+  .hologram-text {
+    background: linear-gradient(
+      135deg,
+      var(--primary) 0%,
+      #a855f7 50%,
+      var(--tertiary) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(
+      0 2px 12px color-mix(in srgb, var(--primary) 40%, transparent)
+    );
+  }
+
+  .animate-float {
+    animation: cyberFloat 6s ease-in-out infinite;
+  }
+  .animate-pulse-glow {
+    animation: cyberPulse 4s ease-in-out infinite;
+  }
 }

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Calendar, User, Loader2, BookOpen } from 'lucide-react';
-import { api } from '../../services/api';
+import React, { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, Calendar, User, Loader2, BookOpen } from "lucide-react";
+import { api } from "../../services/api";
 
 export default function BlogPost() {
   const { slug } = useParams();
@@ -21,11 +21,11 @@ export default function BlogPost() {
       if (res.success) {
         setBlog(res.data);
       } else {
-        setError('Blog not found');
+        setError("Blog not found");
       }
     } catch (err) {
-      console.error('Failed to fetch blog', err);
-      setError(err.message || 'An error occurred while loading the blog');
+      console.error("Failed to fetch blog", err);
+      setError(err.message || "An error occurred while loading the blog");
     } finally {
       setLoading(false);
     }
@@ -42,8 +42,13 @@ export default function BlogPost() {
   if (error || !blog) {
     return (
       <div className="min-h-screen bg-surface pt-32 pb-20 px-8 text-center">
-        <h2 className="text-2xl font-bold text-error mb-4">{error || 'Blog not found'}</h2>
-        <button onClick={() => navigate('/blog')} className="text-primary hover:underline">
+        <h2 className="text-2xl font-bold text-error mb-4">
+          {error || "Blog not found"}
+        </h2>
+        <button
+          onClick={() => navigate("/blog")}
+          className="text-primary hover:underline"
+        >
           Return to Blogs
         </button>
       </div>
@@ -53,13 +58,20 @@ export default function BlogPost() {
   return (
     <div className="min-h-screen bg-surface pt-24 pb-20 px-8">
       <div className="max-w-4xl mx-auto">
-        <Link to="/blog" className="inline-flex items-center gap-2 text-primary hover:text-secondary font-bold mb-8 transition-colors">
+        <Link
+          to="/blog"
+          className="inline-flex items-center gap-2 text-primary hover:text-secondary font-bold mb-8 transition-colors"
+        >
           <ArrowLeft className="w-4 h-4" /> Back to Blogs
         </Link>
 
         {blog.imageUrl && (
           <div className="w-full h-64 md:h-96 rounded-[2rem] overflow-hidden mb-12 shadow-xl">
-            <img src={blog.imageUrl} alt={blog.title} className="w-full h-full object-cover" />
+            <img
+              src={blog.imageUrl}
+              alt={blog.title}
+              className="w-full h-full object-cover"
+            />
           </div>
         )}
 
@@ -71,7 +83,7 @@ export default function BlogPost() {
             </div>
             <div className="flex items-center gap-2 bg-surface-dim/30 px-4 py-2 rounded-full">
               <User className="w-4 h-4 text-primary" />
-              {blog.author?.name || 'Admin'}
+              {blog.author?.name || "Admin"}
             </div>
           </div>
 
@@ -79,7 +91,7 @@ export default function BlogPost() {
             {blog.title}
           </h1>
 
-          <div 
+          <div
             className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-headline prose-headings:text-primary prose-a:text-secondary hover:prose-a:text-primary"
             dangerouslySetInnerHTML={{ __html: blog.content }}
           />
